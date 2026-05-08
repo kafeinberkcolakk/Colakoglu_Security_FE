@@ -1,0 +1,350 @@
+{
+  "auth": {
+    "logout": "Logout",
+    "profile": "Profile",
+    "profileUpdate": "Profile"
+  },
+  "core": {
+    "active": "Active",
+    "cancel": "Cancel",
+    "clear": "Clear",
+    "close": "Close",
+    "confirmDelete": "Delete selected items?",
+    "confirmTitle": "Are you sure?",
+    "create": "Create",
+    "detail": "Detail",
+    "edit": "Edit",
+    "enter": "Enter",
+    "export": "Export",
+    "filters": "Filters",
+    "inactive": "Inactive",
+    "language": "Language",
+    "loading": "Loading...",
+    "new": "New",
+    "next": "Next",
+    "no": "No",
+    "noData": "No data available.",
+    "noPermission": "You do not have permission to view this content.",
+    "page": "Page",
+    "previous": "Previous",
+    "rowsPerPage": "Rows per page",
+    "save": "Save",
+    "search": "Search",
+    "submit": "Submit",
+    "update": "Update",
+    "yes": "Yes"
+  },
+  "langs": {
+    "en": "English"
+  },
+  "page": {
+    "authError": {
+      "actions": {
+        "retry": "Try login again"
+      },
+      "description": "Authentication could not be completed. Check the identity provider configuration and try again.",
+      "title": "Authentication error"
+    },
+    "collectors": {
+      "delete": {
+        "confirm": "Collector \"{name}\" will be permanently deleted along with its run history.",
+        "title": "Delete Collector?"
+      },
+      "detail": {
+        "info": {
+          "enabled": "Status",
+          "intervalSeconds": "Interval",
+          "natsSubject": "NATS subject"
+        },
+        "runs": {
+          "title": "Run history"
+        },
+        "stats": {
+          "avgDuration": "Avg duration",
+          "lastError": "Last error",
+          "messagesSubtitle": "Messages: {count}",
+          "noError": "No errors recorded.",
+          "p95Duration": "p95 duration",
+          "p95Subtitle": "Across recent runs",
+          "successRate": "Success rate",
+          "totalRuns": "{count} runs"
+        },
+        "title": "Collector detail"
+      },
+      "filter": {
+        "name": "Name",
+        "natsSubject": "NATS subject",
+        "type": "Type"
+      },
+      "form": {
+        "config": {
+          "dbQuery": {
+            "fetchSize": "Fetch size",
+            "jdbcUrl": "JDBC URL",
+            "jdbcUrlPlaceholder": "jdbc:postgresql://host:5432/db",
+            "password": "Password",
+            "passwordPlaceholder": "Enter password",
+            "sql": "SQL",
+            "sqlPlaceholder": "SELECT id, name FROM ...",
+            "username": "Username",
+            "usernamePlaceholder": "Database user"
+          },
+          "fileSftp": {
+            "filePattern": "File pattern (regex)",
+            "filePatternPlaceholder": ".*\\.csv$",
+            "host": "Host",
+            "hostPlaceholder": "sftp.example.com",
+            "moveAfterDownload": "Move processed files",
+            "password": "Password",
+            "passwordPlaceholder": "Enter password",
+            "port": "Port",
+            "processedDir": "Processed dir",
+            "processedDirPlaceholder": "/inbox/processed",
+            "remoteDir": "Remote dir",
+            "remoteDirPlaceholder": "/inbox",
+            "username": "Username",
+            "usernamePlaceholder": "SFTP user"
+          },
+          "httpRest": {
+            "body": "Body",
+            "bodyPlaceholder": "Optional request body",
+            "headerKeyPlaceholder": "Header name",
+            "headers": "Headers",
+            "headerValuePlaceholder": "Header value",
+            "method": "HTTP method",
+            "url": "URL",
+            "urlPlaceholder": "https://api.example.com/data"
+          },
+          "title": "Configuration",
+          "webhook": {
+            "hint": "Webhook collectors are pushed by external systems. No config required."
+          }
+        },
+        "enabled": "Enabled",
+        "intervalPlaceholder": "300",
+        "intervalSeconds": "Interval (seconds)",
+        "name": "Name",
+        "namePlaceholder": "sentinelone-scheduled",
+        "natsSubject": "NATS subject",
+        "natsSubjectPlaceholder": "edr.sentinelone.scheduled",
+        "secret": {
+          "changeToggle": "Change secret",
+          "hint": "Used by external systems to authenticate webhook calls. Leave empty to remove existing secret.",
+          "keepHint": "Existing secret will be preserved.",
+          "label": "Secret",
+          "placeholder": "Enter secret",
+          "title": "Secret"
+        },
+        "titleEdit": "Edit Collector",
+        "titleNew": "New Collector",
+        "type": "Type",
+        "typeLocked": "Type cannot be changed after creation."
+      },
+      "table": {
+        "enabled": "Status",
+        "intervalSeconds": "Interval",
+        "name": "Name",
+        "natsSubject": "NATS subject",
+        "type": "Type"
+      },
+      "title": "Collectors",
+      "toast": {
+        "createError": "Failed to create collector.",
+        "createSuccess": "Collector created.",
+        "deleteError": "Failed to delete collector.",
+        "deleteSuccess": "Collector deleted.",
+        "updateError": "Failed to update collector.",
+        "updateSuccess": "Collector updated."
+      },
+      "toolbar": {
+        "new": "Add Collector"
+      },
+      "triggerTypes": {
+        "MANUAL": "Manual",
+        "SCHEDULE": "Schedule",
+        "WEBHOOK": "Webhook"
+      },
+      "types": {
+        "DB_QUERY": "Database Query",
+        "FILE_SFTP": "SFTP File",
+        "HTTP_REST": "HTTP REST",
+        "WEBHOOK": "Webhook"
+      }
+    },
+    "dashboard": {
+      "activeFlows": "Other data flows",
+      "cards": {
+        "dlq": "Dead-letter entries",
+        "dlqAttention": "Needs attention",
+        "dlqHealthy": "Healthy",
+        "last24h": "Last 24h",
+        "last24hSubtitle": "Messages received",
+        "lastHour": "Last hour",
+        "lastHourSubtitle": "Messages received",
+        "total": "Total messages",
+        "totalSubtitle": "Across all subjects"
+      },
+      "flow": {
+        "subtitle": "Last 24 hours, hourly buckets",
+        "title": "Message flow"
+      },
+      "live": "● LIVE",
+      "subjectFlows": {
+        "empty": "No subject activity in the last 24 hours.",
+        "messageCount": "{count} messages",
+        "subtitle": "Live, last 24h",
+        "title": "Live data flows"
+      },
+      "title": "Dashboard"
+    },
+    "data": {
+      "live": {
+        "activity": {
+          "title": "Activity (last 24h)"
+        },
+        "export": {
+          "empty": "No rows to export."
+        },
+        "messages": {
+          "title": "Messages"
+        },
+        "stats": {
+          "first": "First received",
+          "firstSubtitle": "Earliest message",
+          "last": "Last received",
+          "lastSubtitle": "Most recent message",
+          "total": "Total messages",
+          "totalSubtitle": "All-time count"
+        },
+        "status": {
+          "live": "● LIVE",
+          "pause": "Pause",
+          "paused": "⏸ PAUSED"
+        },
+        "table": {
+          "isJson": "Format",
+          "payloadSize": "Size",
+          "receivedAt": "Received at"
+        }
+      },
+      "payload": {
+        "copy": {
+          "error": "Could not copy to clipboard.",
+          "label": "Copy JSON",
+          "success": "Copied to clipboard."
+        },
+        "downloadRaw": "Download raw",
+        "fields": {
+          "format": "Format",
+          "formatRaw": "Raw bytes",
+          "id": "ID",
+          "messageId": "Message ID",
+          "receivedAt": "Received at",
+          "size": "Size",
+          "subject": "Subject"
+        },
+        "payload": {
+          "empty": "No payload available.",
+          "title": "Payload"
+        },
+        "title": "Message detail"
+      },
+      "subjects": {
+        "filter": {
+          "subject": "Subject"
+        },
+        "table": {
+          "firstReceivedAt": "First received",
+          "lastReceivedAt": "Last received",
+          "messageCount": "Messages",
+          "subject": "Subject"
+        },
+        "title": "Data flows"
+      }
+    },
+    "dlq": {
+      "delete": {
+        "confirm": "This DLQ entry will be permanently deleted.",
+        "title": "Delete DLQ entry?"
+      },
+      "detail": {
+        "consumer": "Consumer",
+        "errorMessage": "Error message",
+        "occurredAt": "Occurred at",
+        "originalSubject": "Original subject",
+        "payloadBytes": "Payload size",
+        "retriedAt": "Last retried at",
+        "retryCount": "Retry count",
+        "title": "DLQ entry detail"
+      },
+      "filter": {
+        "consumer": "Consumer",
+        "errorMessage": "Error message",
+        "originalSubject": "Original subject"
+      },
+      "table": {
+        "consumer": "Consumer",
+        "errorMessage": "Error message",
+        "occurredAt": "Occurred at",
+        "originalSubject": "Original subject",
+        "retryCount": "Retries"
+      },
+      "title": "Dead Letter Queue",
+      "toast": {
+        "deleteError": "Failed to delete DLQ entry.",
+        "deleteSuccess": "DLQ entry deleted.",
+        "retryError": "Failed to retry DLQ entry.",
+        "retrySuccess": "DLQ entry re-queued."
+      }
+    },
+    "profile": {
+      "form": {
+        "confirmPassword": "Confirm Password",
+        "currentPassword": "Current Password",
+        "email": "Email",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "newPassword": "New Password",
+        "userName": "Username"
+      },
+      "sections": {
+        "info": "Personal Information",
+        "password": "Change Password"
+      },
+      "title": "Profile",
+      "toast": {
+        "passwordError": "Failed to change password.",
+        "passwordSuccess": "Password changed successfully.",
+        "updateError": "Failed to update profile.",
+        "updateSuccess": "Profile updated successfully."
+      }
+    }
+  },
+  "relative": {
+    "days": "{count}d",
+    "hours": "{count}h",
+    "minutes": "{count}m",
+    "seconds": "{count}s"
+  },
+  "sidebar": {
+    "menu": {
+      "collectors": "Collectors",
+      "dashboard": "Dashboard",
+      "data": "Data Flows",
+      "dlq": "Dead Letter Queue",
+      "profile": "Profile"
+    }
+  },
+  "theme": {
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "validation": {
+    "noValidEmail": "Invalid e-mail address.",
+    "passwordMismatch": "Passwords do not match.",
+    "positiveInt": "Must be a positive integer.",
+    "required": "This field is required.",
+    "tooLong": "Value is too long.",
+    "urlInvalid": "Enter a valid URL."
+  }
+}
