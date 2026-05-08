@@ -59,9 +59,7 @@ export function SubjectFlowGrid({ payloads, subjects }: SubjectFlowGridProps) {
   );
 
   if (entries.length === 0) {
-    return (
-      <p className="text-sm text-muted-foreground">{t("empty")}</p>
-    );
+    return <p className="text-sm text-muted-foreground">{t("empty")}</p>;
   }
 
   return (
