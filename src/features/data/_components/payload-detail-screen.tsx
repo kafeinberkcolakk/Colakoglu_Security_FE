@@ -1,11 +1,12 @@
 "use client";
 
 import { Copy, Download } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { JsonTreeView } from "@/components/ui/json-tree-view";
 import { PageHeader } from "@/components/ui/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { dataApi } from "@/features/data/api/data-api";
@@ -14,34 +15,34 @@ import type { PayloadDetail } from "@/features/data/types/data";
 import { pageRoutes } from "@/lib/const/pages";
 import { formatBytes } from "@/lib/format";
 
+const LARGE_PAYLOAD_THRESHOLD_BYTES = 1_000_000;
+
+const JsonTreeView = dynamic(
+  () =>
+    import("@/components/ui/json-tree-view").then((mod) => mod.JsonTreeView),
+  { loading: () => <Skeleton className="h-40 w-full" />, ssr: false },
+);
+
 interface PayloadDetailScreenProps {
   payloadId: string;
 }
 
-const BASE64_PADDING_REGEX = /=+$/;
-const BASE64_BYTES_PER_GROUP = 3;
-const BASE64_CHARS_PER_GROUP = 4;
-
-function payloadByteLength(payload: PayloadDetail): number {
-  if (payload.payload !== undefined) {
-    return new Blob([JSON.stringify(payload.payload)]).size;
+function computePayloadSize(detail: PayloadDetail): number {
+  if (detail.payload !== undefined) {
+    return new Blob([JSON.stringify(detail.payload)]).size;
   }
-  if (payload.rawPayloadBase64) {
-    const padding = (
-      payload.rawPayloadBase64.match(BASE64_PADDING_REGEX)?.[0] ?? ""
-    ).length;
-    const base64Length = payload.rawPayloadBase64.length;
-    return (
-      (base64Length * BASE64_BYTES_PER_GROUP) / BASE64_CHARS_PER_GROUP - padding
-    );
-  }
-  return 0;
+  return detail.rawSize;
 }
 
 export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
   const t = useTranslations("page.data.payload");
   const tCore = useTranslations("core");
   const { data, isLoading } = usePayloadDetail(payloadId);
+
+  const payloadSize = useMemo(
+    () => (data ? computePayloadSize(data) : 0),
+    [data],
+  );
 
   const handleCopy = async () => {
     if (!data?.payload) {
@@ -105,7 +106,7 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
               />
               <Field
                 label={t("fields.size")}
-                value={formatBytes(payloadByteLength(data))}
+                value={formatBytes(payloadSize)}
               />
             </section>
 
@@ -115,8 +116,9 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
               </h2>
               <PayloadBody
                 emptyLabel={t("payload.empty")}
+                largeLabel={t("payload.large")}
                 payload={data.payload}
-                rawBase64={data.rawPayloadBase64}
+                size={payloadSize}
               />
             </section>
           </>
@@ -128,19 +130,32 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
 
 interface PayloadBodyProps {
   emptyLabel: string;
+  largeLabel: string;
   payload?: Record<string, unknown> | unknown[];
-  rawBase64?: string;
+  size: number;
 }
 
-function PayloadBody({ emptyLabel, payload, rawBase64 }: PayloadBodyProps) {
+function PayloadBody({
+  emptyLabel,
+  largeLabel,
+  payload,
+  size,
+}: PayloadBodyProps) {
   if (payload) {
+    if (size > LARGE_PAYLOAD_THRESHOLD_BYTES) {
+      return (
+        <p className="text-sm text-muted-foreground">
+          {largeLabel.replace("{size}", formatBytes(size))}
+        </p>
+      );
+    }
     return <JsonTreeView data={payload} />;
   }
-  if (rawBase64) {
+  if (size > 0) {
     return (
-      <pre className="max-h-96 overflow-auto rounded-md border border-border bg-card p-3 font-mono text-xs">
-        {rawBase64}
-      </pre>
+      <p className="text-sm text-muted-foreground">
+        {largeLabel.replace("{size}", formatBytes(size))}
+      </p>
     );
   }
   return <p className="text-sm text-muted-foreground">{emptyLabel}</p>;

@@ -2,10 +2,14 @@
 
 import {
   Activity,
+  BarChart3,
+  Gauge,
   Inbox,
   LayoutDashboard,
   type LucideIcon,
   Menu,
+  ShieldAlert,
+  TrendingUp,
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
@@ -14,6 +18,9 @@ import { useTranslations } from "next-intl";
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -28,11 +35,51 @@ type NavItem = {
   labelKey: string;
 };
 
-const NAV_ITEMS: NavItem[] = [
-  { href: pageRoutes.home, icon: LayoutDashboard, labelKey: "dashboard" },
-  { href: pageRoutes.data, icon: Activity, labelKey: "data" },
-  { href: pageRoutes.collectors, icon: Workflow, labelKey: "collectors" },
-  { href: pageRoutes.dlq, icon: Inbox, labelKey: "dlq" },
+type NavGroup = {
+  groupKey: string;
+  items: NavItem[];
+};
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    groupKey: "monitoring",
+    items: [
+      { href: pageRoutes.home, icon: LayoutDashboard, labelKey: "dashboard" },
+      { href: pageRoutes.data, icon: Activity, labelKey: "data" },
+    ],
+  },
+  {
+    groupKey: "reporting",
+    items: [
+      {
+        href: pageRoutes.reportsSystem,
+        icon: Gauge,
+        labelKey: "reportsSystem",
+      },
+      {
+        href: pageRoutes.reportsSubjects,
+        icon: BarChart3,
+        labelKey: "reportsSubjects",
+      },
+      {
+        href: pageRoutes.reportsFlowPerformance,
+        icon: TrendingUp,
+        labelKey: "reportsFlowPerformance",
+      },
+      {
+        href: pageRoutes.reportsThreats,
+        icon: ShieldAlert,
+        labelKey: "reportsThreats",
+      },
+    ],
+  },
+  {
+    groupKey: "admin",
+    items: [
+      { href: pageRoutes.flows, icon: Workflow, labelKey: "flows" },
+      { href: pageRoutes.dlq, icon: Inbox, labelKey: "dlq" },
+    ],
+  },
 ];
 
 function SidebarHeaderContent() {
@@ -57,9 +104,17 @@ function SidebarHeaderContent() {
   );
 }
 
+function isItemActive(pathname: string, href: string): boolean {
+  if (href === pageRoutes.home) {
+    return pathname === pageRoutes.home;
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function AppSidebar() {
   const pathname = usePathname();
-  const t = useTranslations("sidebar.menu");
+  const tMenu = useTranslations("sidebar.menu");
+  const tGroup = useTranslations("sidebar.group");
 
   return (
     <Sidebar collapsible="icon">
@@ -71,32 +126,35 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="py-1">
-        <SidebarMenu className="gap-0 px-2">
-          {NAV_ITEMS.map((item) => {
-            const label = t(item.labelKey);
-            const isActive =
-              item.href === pageRoutes.home
-                ? pathname === pageRoutes.home
-                : pathname === item.href ||
-                  pathname.startsWith(`${item.href}/`);
+        {NAV_GROUPS.map((group) => (
+          <SidebarGroup key={group.groupKey}>
+            <SidebarGroupLabel>{tGroup(group.groupKey)}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-0 px-2">
+                {group.items.map((item) => {
+                  const label = tMenu(item.labelKey);
+                  const active = isItemActive(pathname, item.href);
 
-            return (
-              <SidebarMenuItem key={item.labelKey}>
-                <SidebarMenuButton
-                  asChild={true}
-                  className="h-11 rounded-none text-sm font-normal text-foreground/80 hover:text-foreground"
-                  isActive={isActive}
-                  tooltip={label}
-                >
-                  <Link href={item.href}>
-                    <item.icon className="size-[18px] shrink-0" />
-                    <span>{label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            );
-          })}
-        </SidebarMenu>
+                  return (
+                    <SidebarMenuItem key={item.labelKey}>
+                      <SidebarMenuButton
+                        asChild={true}
+                        className="h-11 rounded-none text-sm font-normal text-foreground/80 hover:text-foreground"
+                        isActive={active}
+                        tooltip={label}
+                      >
+                        <Link href={item.href}>
+                          <item.icon className="size-[18px] shrink-0" />
+                          <span>{label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
     </Sidebar>
   );

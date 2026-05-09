@@ -2,6 +2,8 @@
 
 import { LogOut, User } from "lucide-react";
 import Link from "next/link";
+import { HealthDot } from "@/components/layout/health-dot";
+import { LanguagePicker } from "@/components/layout/language-picker";
 import { apiRoutes, pageRoutes } from "@/lib/const/pages";
 
 const AppHeader = () => {
@@ -15,9 +17,12 @@ const AppHeader = () => {
           Kafein Partner
         </span>
         <span className="text-white/50 text-xs font-normal">0.0.1</span>
+        <HealthDot />
       </div>
 
       <div className="flex items-center gap-1.5">
+        <LanguagePicker />
+
         <Link
           className="flex size-8 items-center justify-center rounded text-white hover:bg-white/10 transition-colors"
           href={pageRoutes.profile}

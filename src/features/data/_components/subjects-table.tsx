@@ -8,8 +8,9 @@ import {
   subjectFreshness,
 } from "@/features/data/domain/bucket-aggregation";
 import type { SubjectStats } from "@/features/data/types/data";
+import { useRelativeLabels } from "@/hooks/use-relative-labels";
 import { pageRoutes } from "@/lib/const/pages";
-import { formatDate, formatRelative } from "@/lib/format";
+import { formatRelative } from "@/lib/format";
 
 interface SubjectsTableProps {
   data: SubjectStats[];
@@ -17,15 +18,8 @@ interface SubjectsTableProps {
 
 export function SubjectsTable({ data }: SubjectsTableProps) {
   const t = useTranslations("page.data.subjects.table");
-  const tRelative = useTranslations("relative");
   const tCore = useTranslations("core");
-
-  const relativeLabels = {
-    days: tRelative("days"),
-    hours: tRelative("hours"),
-    minutes: tRelative("minutes"),
-    seconds: tRelative("seconds"),
-  };
+  const relativeLabels = useRelativeLabels();
 
   const columns: TableColumn<SubjectStats>[] = [
     {
@@ -45,12 +39,6 @@ export function SubjectsTable({ data }: SubjectsTableProps) {
       align: "right",
       header: t("messageCount"),
       key: "messageCount",
-      sortable: true,
-    },
-    {
-      header: t("firstReceivedAt"),
-      key: "firstReceivedAt",
-      render: (row) => formatDate(row.firstReceivedAt),
       sortable: true,
     },
     {

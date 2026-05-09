@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { dataApi } from "@/features/data/api/data-api";
 import type { PayloadListQuery } from "@/features/data/types/data";
 
@@ -18,6 +18,7 @@ export function usePayloads({
 }: UsePayloadsOptions) {
   return useQuery({
     enabled,
+    placeholderData: keepPreviousData,
     queryFn: () => dataApi.payloads(query),
     queryKey: payloadsKey(query),
     refetchInterval,

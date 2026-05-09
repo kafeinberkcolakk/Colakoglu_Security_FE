@@ -331,6 +331,166 @@ import { DataSourceItem } from "@/components/ui/data-source-item";
 
 ---
 
+### `MetricCard` — `metric-card.tsx`
+
+Use for any large-number stat card on dashboards or reports. Always prefer this over building a `WidgetCard` + `<p>` combo by hand.
+
+```tsx
+import { MetricCard } from "@/components/ui/metric-card";
+
+<MetricCard
+  title="Avg duration"
+  subtitle="Last 100 runs"
+  value={423}
+  unit="ms"
+  viewAll="/reports/flow-performance"
+/>
+```
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `title` | `string` | ✓ | Card title |
+| `value` | `ReactNode` | ✓ | Big number (or any node) rendered center |
+| `subtitle` | `string` | — | Secondary line below title |
+| `unit` | `string` | — | Suffix rendered after `value` (e.g. `"ms"`, `"%"`) |
+| `viewAll` | `string \| () => void` | — | Same as `WidgetCard.viewAll` |
+| `className` | `string` | — | Tailwind overrides |
+
+---
+
+### `ChartCard` — `chart-card.tsx`
+
+Wrapper around `WidgetCard` that handles loading / empty / error states for any chart. Charts must always be wrapped with this — never render a raw `<ResponsiveContainer>` inside a bare `WidgetCard`.
+
+```tsx
+import { ChartCard } from "@/components/ui/chart-card";
+
+<ChartCard
+  title="Message flow"
+  subtitle="Last 24 hours"
+  isLoading={query.isLoading}
+  isError={query.isError}
+  isEmpty={buckets.length === 0}
+  emptyTitle="No activity"
+  errorTitle="Failed to load chart"
+>
+  <MessageFlowChart data={buckets} />
+</ChartCard>
+```
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `title` | `string` | ✓ | Card title |
+| `children` | `ReactNode` | ✓ | The chart itself |
+| `subtitle` | `string` | — | Secondary line below title |
+| `isLoading` | `boolean` | — | Renders a skeleton placeholder |
+| `isError` | `boolean` | — | Renders an `EmptyState` with `errorTitle` |
+| `isEmpty` | `boolean` | — | Renders an `EmptyState` with `emptyTitle` |
+| `emptyTitle` | `string` | — | Empty state caption |
+| `errorTitle` | `string` | — | Error state caption (also used as description) |
+| `height` | `number` | — | Min height in px (default: `280`) |
+| `viewAll` | `string \| () => void` | — | Same as `WidgetCard.viewAll` |
+| `onMaximize` | `() => void` | — | Maximize handler |
+| `className` | `string` | — | Tailwind overrides |
+
+---
+
+### `LiveIndicator` — `live-indicator.tsx`
+
+Use for any "● LIVE / ⏸ PAUSED" status badge. Replaces all per-screen one-off pulsing-dot spans.
+
+```tsx
+import { LiveIndicator } from "@/components/ui/live-indicator";
+
+<LiveIndicator label="● LIVE" />
+
+<LiveIndicator
+  label="● LIVE"
+  paused={isPaused}
+  pausedLabel="⏸ PAUSED"
+/>
+```
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `label` | `string` | ✓ | Active label (when not paused) |
+| `paused` | `boolean` | — | Renders muted dot + `pausedLabel` |
+| `pausedLabel` | `string` | — | Label when paused (defaults to `label`) |
+| `className` | `string` | — | Tailwind overrides |
+
+---
+
+### `TimeRangePicker` — `time-range-picker.tsx`
+
+Use for any preset-based time range toggle (1h / 24h / 7d). Renders as a semantic `<fieldset>` with toggle buttons.
+
+```tsx
+import { TimeRangePicker } from "@/components/ui/time-range-picker";
+import type { TimeRangePreset } from "@/components/ui/time-range-picker";
+
+const PRESETS: TimeRangePreset[] = [
+  { label: "1h", value: "1h" },
+  { label: "24h", value: "24h" },
+  { label: "7d", value: "7d" },
+];
+
+const [range, setRange] = useState("24h");
+
+<TimeRangePicker
+  presets={PRESETS}
+  value={range}
+  onChange={setRange}
+  legend="Time range"
+/>
+```
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `presets` | `TimeRangePreset[]` | ✓ | Toggle options |
+| `value` | `string` | ✓ | Currently selected value |
+| `onChange` | `(value: string) => void` | ✓ | Selection handler |
+| `legend` | `string` | — | Screen-reader label for the fieldset |
+| `className` | `string` | — | Tailwind overrides |
+
+**`TimeRangePreset` shape:**
+
+```ts
+interface TimeRangePreset {
+  label: string;
+  value: string;
+}
+```
+
+---
+
+### `EmptyState` — `empty-state.tsx`
+
+Use for any empty list / table / chart placeholder. Replaces inline "No data" `<div>`s.
+
+```tsx
+import { EmptyState } from "@/components/ui/empty-state";
+import { Search } from "lucide-react";
+
+<EmptyState title="No subjects yet" />
+
+<EmptyState
+  icon={Search}
+  title="No matches"
+  description="Try clearing the filter."
+  action={<Button onClick={reset}>Clear filter</Button>}
+/>
+```
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `title` | `string` | ✓ | Primary line |
+| `description` | `string` | — | Secondary line below title |
+| `icon` | `LucideIcon` | — | Icon component (default: `Inbox`) |
+| `action` | `ReactNode` | — | Optional action button below the text |
+| `className` | `string` | — | Tailwind overrides |
+
+---
+
 ## 4. Responsibility of Each Folder
 
 ### `app/`

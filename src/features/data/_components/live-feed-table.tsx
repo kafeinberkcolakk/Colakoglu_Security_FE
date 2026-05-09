@@ -54,8 +54,8 @@ export function LiveFeedTable({
     },
     {
       header: t("isJson"),
-      key: "isJson",
-      render: (row) => (row.isJson ? "JSON" : "Raw"),
+      key: "hasJson",
+      render: (row) => (row.hasJson ? "JSON" : "Raw"),
       sortable: true,
     },
     {

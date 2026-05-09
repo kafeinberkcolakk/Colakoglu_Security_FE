@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { LiveIndicator } from "@/components/ui/live-indicator";
 import { PageHeader } from "@/components/ui/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { WidgetCard } from "@/components/ui/widget-card";
@@ -14,20 +15,17 @@ import { bucketByHour } from "@/features/data/domain/bucket-aggregation";
 import { usePayloads } from "@/features/data/hooks/use-payloads";
 import { useSubjects } from "@/features/data/hooks/use-subjects";
 import type { PayloadSummary } from "@/features/data/types/data";
+import { useExponentialBackoff } from "@/hooks/use-exponential-backoff";
+import { useDocumentHidden } from "@/hooks/use-visibility-pause";
 import {
   DEFAULT_PAYLOAD_PAGE_SIZE,
   FLOW_CHART_BUCKET_LIMIT,
-  HOURS_PER_DAY,
   LIVE_FEED_REFETCH_INTERVAL_MS,
-  MS_PER_HOUR,
 } from "@/lib/const/intervals";
+import { computeLast24hIso } from "@/lib/format";
 
 const SKELETON_BAR_HEIGHT = 200;
-const HIGHLIGHT_TIMEOUT_MS = 1500;
-
-function computeLast24hIso(): string {
-  return new Date(Date.now() - HOURS_PER_DAY * MS_PER_HOUR).toISOString();
-}
+const HIGHLIGHT_TIMEOUT_MS = 2000;
 
 interface SubjectDetailScreenProps {
   subject: string;
@@ -43,7 +41,7 @@ function toCsv(rows: PayloadSummary[]): string {
         row.messageId,
         row.receivedAt,
         String(row.payloadSize),
-        String(row.isJson),
+        String(row.hasJson),
       ]
         .map((cell) => `"${cell.replace(/"/g, '""')}"`)
         .join(","),
@@ -70,9 +68,13 @@ export function SubjectDetailScreen({ subject }: SubjectDetailScreenProps) {
   const tCore = useTranslations("core");
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAYLOAD_PAGE_SIZE);
-  const [paused, setPaused] = useState(false);
+  const [manualPaused, setManualPaused] = useState(false);
   const [highlightId, setHighlightId] = useState<string | null>(null);
-  const previousNewestRef = useRef<string | null>(null);
+  const previousNewestIdRef = useRef<string | null>(null);
+
+  const tabHidden = useDocumentHidden();
+  const paused = manualPaused || tabHidden;
+  const backoff = useExponentialBackoff(LIVE_FEED_REFETCH_INTERVAL_MS);
 
   const subjectsQuery = useSubjects();
   const subjectStats = subjectsQuery.data?.find(
@@ -81,7 +83,7 @@ export function SubjectDetailScreen({ subject }: SubjectDetailScreenProps) {
 
   const listQuery = usePayloads({
     query: { page, size: pageSize, subject },
-    refetchInterval: paused ? false : LIVE_FEED_REFETCH_INTERVAL_MS,
+    refetchInterval: paused ? false : backoff.intervalMs,
   });
 
   const [fromIso] = useState(computeLast24hIso);
@@ -106,19 +108,33 @@ export function SubjectDetailScreen({ subject }: SubjectDetailScreenProps) {
       return;
     }
     if (
-      previousNewestRef.current !== null &&
-      newest.receivedAt !== previousNewestRef.current
+      previousNewestIdRef.current !== null &&
+      newest.id !== previousNewestIdRef.current
     ) {
       setHighlightId(newest.id);
       const timer = setTimeout(
         () => setHighlightId(null),
         HIGHLIGHT_TIMEOUT_MS,
       );
-      previousNewestRef.current = newest.receivedAt;
+      previousNewestIdRef.current = newest.id;
       return () => clearTimeout(timer);
     }
-    previousNewestRef.current = newest.receivedAt;
+    previousNewestIdRef.current = newest.id;
   }, [listQuery.data]);
+
+  const { onError: onBackoffError, onSuccess: onBackoffSuccess } = backoff;
+  useEffect(() => {
+    if (listQuery.isError) {
+      onBackoffError();
+    } else if (listQuery.isSuccess) {
+      onBackoffSuccess();
+    }
+  }, [
+    listQuery.isError,
+    listQuery.isSuccess,
+    onBackoffError,
+    onBackoffSuccess,
+  ]);
 
   const handleExport = () => {
     const rows = listQuery.data?.content ?? [];
@@ -135,18 +151,14 @@ export function SubjectDetailScreen({ subject }: SubjectDetailScreenProps) {
   return (
     <div>
       <PageHeader title={subject}>
-        <span
-          className={
-            paused
-              ? "text-muted-foreground text-xs"
-              : "text-emerald-500 text-xs"
-          }
-        >
-          {paused ? t("status.paused") : t("status.live")}
-        </span>
+        <LiveIndicator
+          label={t("status.live")}
+          paused={paused}
+          pausedLabel={t("status.paused")}
+        />
         <Button
           aria-label={paused ? tCore("update") : t("status.pause")}
-          onClick={() => setPaused((prev) => !prev)}
+          onClick={() => setManualPaused((prev) => !prev)}
           size="icon-sm"
           variant="outline"
         >
@@ -159,23 +171,13 @@ export function SubjectDetailScreen({ subject }: SubjectDetailScreenProps) {
       </PageHeader>
 
       <div className="flex flex-col gap-6 px-6 pb-8">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <WidgetCard
             subtitle={t("stats.totalSubtitle")}
             title={t("stats.total")}
           >
             <p className="text-3xl font-semibold text-foreground">
               {subjectStats?.messageCount ?? 0}
-            </p>
-          </WidgetCard>
-          <WidgetCard
-            subtitle={t("stats.firstSubtitle")}
-            title={t("stats.first")}
-          >
-            <p className="text-sm text-foreground">
-              {subjectStats?.firstReceivedAt
-                ? new Date(subjectStats.firstReceivedAt).toLocaleString()
-                : "—"}
             </p>
           </WidgetCard>
           <WidgetCard

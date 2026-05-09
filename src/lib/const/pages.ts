@@ -1,14 +1,18 @@
 export const pageRoutes = {
   authError: "/auth/error",
-  collectorDetail: (collectorId: string) => `/collectors/${collectorId}`,
-  collectorEdit: (collectorId: string) => `/collectors/${collectorId}/edit`,
-  collectorNew: "/collectors/new",
-  collectors: "/collectors",
   data: "/data",
   dlq: "/dlq",
+  flowDetail: (flowId: number | string) => `/flows/${flowId}`,
+  flowEdit: (flowId: number | string) => `/flows/${flowId}/edit`,
+  flowNew: "/flows/new",
+  flows: "/flows",
   home: "/",
   messageDetail: (messageId: string) => `/data/messages/${messageId}`,
   profile: "/profile",
+  reportsFlowPerformance: "/reports/flow-performance",
+  reportsSubjects: "/reports/subjects",
+  reportsSystem: "/reports/system",
+  reportsThreats: "/reports/threats",
   subjectDetail: (subject: string) => `/data/${encodeURIComponent(subject)}`,
 };
 
@@ -22,11 +26,6 @@ export const beApiRoutes = {
     logout: "/api/auth/logout",
     refresh: "/api/auth/refresh",
   },
-  collector: {
-    base: "/api/collectors",
-    detail: (collectorId: string) => `/api/collectors/${collectorId}`,
-    runs: (collectorId: string) => `/api/collectors/${collectorId}/runs`,
-  },
   data: {
     payloadDetail: (payloadId: string) => `/api/data/payloads/${payloadId}`,
     payloadRaw: (payloadId: string) => `/api/data/payloads/${payloadId}/raw`,
@@ -39,6 +38,19 @@ export const beApiRoutes = {
     detail: (dlqId: string) => `/api/dlq/${dlqId}`,
     retry: (dlqId: string) => `/api/dlq/${dlqId}/retry`,
   },
+  flow: {
+    list: "/api/flows",
+    runs: (flowId: number) =>
+      `/flowgro/v1/flow-execution-scheduler/${flowId}/runs`,
+    schedulerById: (flowId: number) =>
+      `/flowgro/v1/flow-execution-scheduler/${flowId}`,
+    schedulerEnabled: (flowId: number) =>
+      `/flowgro/v1/flow-execution-scheduler/${flowId}/enabled`,
+    schedulerRoot: "/flowgro/v1/flow-execution-scheduler",
+    schedulerRun: (flowId: number) =>
+      `/flowgro/v1/flow-execution-scheduler/run/${flowId}`,
+  },
+  health: "/actuator/health",
   user: {
     changePassword: "/api/users/me/password",
     me: "/api/users/me",

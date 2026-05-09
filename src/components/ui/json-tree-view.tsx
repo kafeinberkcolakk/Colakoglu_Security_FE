@@ -119,11 +119,7 @@ function LeafNode({ name, value }: { name: string; value: unknown }) {
       return <span className="text-muted-foreground">null</span>;
     }
     if (typeof value === "string") {
-      return (
-        <span className="text-emerald-600">
-          {`"${value}"`}
-        </span>
-      );
+      return <span className="text-emerald-600">{`"${value}"`}</span>;
     }
     if (typeof value === "number") {
       return <span className="text-sky-600">{value}</span>;

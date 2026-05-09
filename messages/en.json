@@ -6,6 +6,8 @@
   },
   "core": {
     "active": "Active",
+    "backendDown": "Backend unreachable",
+    "backendUp": "Backend healthy",
     "cancel": "Cancel",
     "clear": "Clear",
     "close": "Close",
@@ -31,11 +33,19 @@
     "save": "Save",
     "search": "Search",
     "submit": "Submit",
+    "timeRange": {
+      "1h": "1h",
+      "7d": "7d",
+      "24h": "24h",
+      "30d": "30d",
+      "label": "Time range"
+    },
     "update": "Update",
     "yes": "Yes"
   },
   "langs": {
-    "en": "English"
+    "en": "English",
+    "tr": "Turkish"
   },
   "page": {
     "authError": {
@@ -45,17 +55,141 @@
       "description": "Authentication could not be completed. Check the identity provider configuration and try again.",
       "title": "Authentication error"
     },
-    "collectors": {
+    "dashboard": {
+      "activeFlows": "Other data flows",
+      "cards": {
+        "dlq": "Dead-letter entries",
+        "dlqAttention": "Needs attention",
+        "dlqHealthy": "Healthy",
+        "last24h": "Last 24h",
+        "last24hSubtitle": "Messages received",
+        "total": "Total messages",
+        "totalSubtitle": "Across all subjects"
+      },
+      "flow": {
+        "subtitle": "Last 24 hours, hourly buckets",
+        "title": "Message flow"
+      },
+      "live": "● LIVE",
+      "subjectFlows": {
+        "empty": "No subject activity in the last 24 hours.",
+        "messageCount": "{count} messages",
+        "subtitle": "Live, last 24h",
+        "title": "Live data flows"
+      },
+      "title": "Dashboard"
+    },
+    "data": {
+      "live": {
+        "activity": {
+          "title": "Activity (last 24h)"
+        },
+        "export": {
+          "empty": "No rows to export."
+        },
+        "messages": {
+          "title": "Messages"
+        },
+        "stats": {
+          "last": "Last received",
+          "lastSubtitle": "Most recent message",
+          "total": "Total messages",
+          "totalSubtitle": "All-time count"
+        },
+        "status": {
+          "live": "● LIVE",
+          "pause": "Pause",
+          "paused": "⏸ PAUSED"
+        },
+        "table": {
+          "isJson": "Format",
+          "payloadSize": "Size",
+          "receivedAt": "Received at"
+        }
+      },
+      "payload": {
+        "copy": {
+          "error": "Could not copy to clipboard.",
+          "label": "Copy JSON",
+          "success": "Copied to clipboard."
+        },
+        "downloadRaw": "Download raw",
+        "fields": {
+          "format": "Format",
+          "formatRaw": "Raw bytes",
+          "id": "ID",
+          "messageId": "Message ID",
+          "receivedAt": "Received at",
+          "size": "Size",
+          "subject": "Subject"
+        },
+        "payload": {
+          "empty": "No payload available.",
+          "large": "This message is large ({size}). Download raw to inspect.",
+          "title": "Payload"
+        },
+        "title": "Message detail"
+      },
+      "subjects": {
+        "filter": {
+          "subject": "Subject"
+        },
+        "table": {
+          "lastReceivedAt": "Last received",
+          "messageCount": "Messages",
+          "subject": "Subject"
+        },
+        "title": "Data flows"
+      }
+    },
+    "dlq": {
       "delete": {
-        "confirm": "Collector \"{name}\" will be permanently deleted along with its run history.",
-        "title": "Delete Collector?"
+        "confirm": "This DLQ entry will be permanently deleted.",
+        "title": "Delete DLQ entry?"
+      },
+      "detail": {
+        "consumer": "Consumer",
+        "errorMessage": "Error message",
+        "occurredAt": "Occurred at",
+        "originalSubject": "Original subject",
+        "payloadBytes": "Payload size",
+        "retriedAt": "Last retried at",
+        "retryCount": "Retry count",
+        "title": "DLQ entry detail"
+      },
+      "filter": {
+        "consumer": "Consumer",
+        "errorMessage": "Error message",
+        "originalSubject": "Original subject"
+      },
+      "table": {
+        "consumer": "Consumer",
+        "errorMessage": "Error message",
+        "occurredAt": "Occurred at",
+        "originalSubject": "Original subject",
+        "retryCount": "Retries"
+      },
+      "title": "Dead Letter Queue",
+      "toast": {
+        "deleteError": "Failed to delete DLQ entry.",
+        "deleteSuccess": "DLQ entry deleted.",
+        "retryError": "Failed to retry DLQ entry.",
+        "retrySuccess": "DLQ entry re-queued."
+      }
+    },
+    "flows": {
+      "delete": {
+        "confirm": "Flow \"{name}\" will be permanently deleted along with its run history.",
+        "title": "Delete Flow?"
       },
       "detail": {
         "info": {
+          "code": "Webhook code",
+          "cronExpression": "Cron expression",
           "enabled": "Status",
-          "intervalSeconds": "Interval",
           "natsSubject": "NATS subject"
         },
+        "run": "Run now",
         "runs": {
           "title": "Run history"
         },
@@ -69,7 +203,7 @@
           "successRate": "Success rate",
           "totalRuns": "{count} runs"
         },
-        "title": "Collector detail"
+        "title": "Flow detail"
       },
       "filter": {
         "name": "Name",
@@ -117,12 +251,15 @@
           },
           "title": "Configuration",
           "webhook": {
-            "hint": "Webhook collectors are pushed by external systems. No config required."
+            "hint": "Webhook flows are pushed by external systems. No config required."
           }
         },
+        "cronExpression": "Cron expression",
+        "cronHint": "Spring 6-field cron format. Leave empty for on-demand only.",
+        "cronPlaceholder": "0 */5 * * * *",
+        "description": "Description",
+        "descriptionPlaceholder": "Optional notes about this flow",
         "enabled": "Enabled",
-        "intervalPlaceholder": "300",
-        "intervalSeconds": "Interval (seconds)",
         "name": "Name",
         "namePlaceholder": "sentinelone-scheduled",
         "natsSubject": "NATS subject",
@@ -135,29 +272,31 @@
           "placeholder": "Enter secret",
           "title": "Secret"
         },
-        "titleEdit": "Edit Collector",
-        "titleNew": "New Collector",
+        "titleEdit": "Edit Flow",
+        "titleNew": "New Flow",
         "type": "Type",
         "typeLocked": "Type cannot be changed after creation."
       },
       "table": {
+        "cronExpression": "Cron expression",
         "enabled": "Status",
-        "intervalSeconds": "Interval",
         "name": "Name",
         "natsSubject": "NATS subject",
         "type": "Type"
       },
-      "title": "Collectors",
+      "title": "Flows",
       "toast": {
-        "createError": "Failed to create collector.",
-        "createSuccess": "Collector created.",
-        "deleteError": "Failed to delete collector.",
-        "deleteSuccess": "Collector deleted.",
-        "updateError": "Failed to update collector.",
-        "updateSuccess": "Collector updated."
+        "createError": "Failed to create flow.",
+        "createSuccess": "Flow created.",
+        "deleteError": "Failed to delete flow.",
+        "deleteSuccess": "Flow deleted.",
+        "runError": "Failed to trigger flow.",
+        "runSuccess": "Flow triggered.",
+        "updateError": "Failed to update flow.",
+        "updateSuccess": "Flow updated."
       },
       "toolbar": {
-        "new": "Add Collector"
+        "new": "Add Flow"
       },
       "triggerTypes": {
         "MANUAL": "Manual",
@@ -165,136 +304,10 @@
         "WEBHOOK": "Webhook"
       },
       "types": {
-        "DB_QUERY": "Database Query",
-        "FILE_SFTP": "SFTP File",
-        "HTTP_REST": "HTTP REST",
-        "WEBHOOK": "Webhook"
-      }
-    },
-    "dashboard": {
-      "activeFlows": "Other data flows",
-      "cards": {
-        "dlq": "Dead-letter entries",
-        "dlqAttention": "Needs attention",
-        "dlqHealthy": "Healthy",
-        "last24h": "Last 24h",
-        "last24hSubtitle": "Messages received",
-        "lastHour": "Last hour",
-        "lastHourSubtitle": "Messages received",
-        "total": "Total messages",
-        "totalSubtitle": "Across all subjects"
-      },
-      "flow": {
-        "subtitle": "Last 24 hours, hourly buckets",
-        "title": "Message flow"
-      },
-      "live": "● LIVE",
-      "subjectFlows": {
-        "empty": "No subject activity in the last 24 hours.",
-        "messageCount": "{count} messages",
-        "subtitle": "Live, last 24h",
-        "title": "Live data flows"
-      },
-      "title": "Dashboard"
-    },
-    "data": {
-      "live": {
-        "activity": {
-          "title": "Activity (last 24h)"
-        },
-        "export": {
-          "empty": "No rows to export."
-        },
-        "messages": {
-          "title": "Messages"
-        },
-        "stats": {
-          "first": "First received",
-          "firstSubtitle": "Earliest message",
-          "last": "Last received",
-          "lastSubtitle": "Most recent message",
-          "total": "Total messages",
-          "totalSubtitle": "All-time count"
-        },
-        "status": {
-          "live": "● LIVE",
-          "pause": "Pause",
-          "paused": "⏸ PAUSED"
-        },
-        "table": {
-          "isJson": "Format",
-          "payloadSize": "Size",
-          "receivedAt": "Received at"
-        }
-      },
-      "payload": {
-        "copy": {
-          "error": "Could not copy to clipboard.",
-          "label": "Copy JSON",
-          "success": "Copied to clipboard."
-        },
-        "downloadRaw": "Download raw",
-        "fields": {
-          "format": "Format",
-          "formatRaw": "Raw bytes",
-          "id": "ID",
-          "messageId": "Message ID",
-          "receivedAt": "Received at",
-          "size": "Size",
-          "subject": "Subject"
-        },
-        "payload": {
-          "empty": "No payload available.",
-          "title": "Payload"
-        },
-        "title": "Message detail"
-      },
-      "subjects": {
-        "filter": {
-          "subject": "Subject"
-        },
-        "table": {
-          "firstReceivedAt": "First received",
-          "lastReceivedAt": "Last received",
-          "messageCount": "Messages",
-          "subject": "Subject"
-        },
-        "title": "Data flows"
-      }
-    },
-    "dlq": {
-      "delete": {
-        "confirm": "This DLQ entry will be permanently deleted.",
-        "title": "Delete DLQ entry?"
-      },
-      "detail": {
-        "consumer": "Consumer",
-        "errorMessage": "Error message",
-        "occurredAt": "Occurred at",
-        "originalSubject": "Original subject",
-        "payloadBytes": "Payload size",
-        "retriedAt": "Last retried at",
-        "retryCount": "Retry count",
-        "title": "DLQ entry detail"
-      },
-      "filter": {
-        "consumer": "Consumer",
-        "errorMessage": "Error message",
-        "originalSubject": "Original subject"
-      },
-      "table": {
-        "consumer": "Consumer",
-        "errorMessage": "Error message",
-        "occurredAt": "Occurred at",
-        "originalSubject": "Original subject",
-        "retryCount": "Retries"
-      },
-      "title": "Dead Letter Queue",
-      "toast": {
-        "deleteError": "Failed to delete DLQ entry.",
-        "deleteSuccess": "DLQ entry deleted.",
-        "retryError": "Failed to retry DLQ entry.",
-        "retrySuccess": "DLQ entry re-queued."
+        "db_query_collector": "Database Query",
+        "file_sftp_collector": "SFTP File",
+        "http_rest_collector": "HTTP REST",
+        "webhook_collector": "Webhook"
       }
     },
     "profile": {
@@ -318,6 +331,99 @@
         "updateError": "Failed to update profile.",
         "updateSuccess": "Profile updated successfully."
       }
+    },
+    "reports": {
+      "flowPerformance": {
+        "empty": "No flows yet.",
+        "stats": {
+          "avgDuration": "Avg duration",
+          "lastError": "Last error",
+          "noError": "—",
+          "p95Duration": "p95",
+          "successRate": "Success",
+          "totalRuns": "Runs"
+        },
+        "subtitle": "Per-flow run performance over the selected window.",
+        "table": {
+          "avgMs": "Avg (ms)",
+          "lastError": "Last error",
+          "lastRun": "Last run",
+          "name": "Flow",
+          "p95Ms": "p95 (ms)",
+          "successRate": "Success rate",
+          "totalRuns": "Runs",
+          "type": "Type"
+        },
+        "title": "Flow Performance"
+      },
+      "subjects": {
+        "activity": {
+          "title": "Hourly activity"
+        },
+        "empty": "Pick a subject to inspect activity.",
+        "noSubjects": "No subjects yet.",
+        "selector": {
+          "label": "Subject",
+          "placeholder": "Choose a subject"
+        },
+        "stats": {
+          "last": "Last received",
+          "total": "Messages"
+        },
+        "subtitle": "Per-subject volume and timing.",
+        "title": "Subject Reports"
+      },
+      "system": {
+        "cards": {
+          "activeFlows": "Active flows",
+          "activeFlowsSubtitle": "Currently enabled",
+          "dlq": "DLQ entries",
+          "dlqHealthy": "Healthy",
+          "dlqNeedsAttention": "Needs attention",
+          "last24h": "Last 24h",
+          "last24hSubtitle": "Messages received",
+          "subjects": "Subjects",
+          "subjectsSubtitle": "Distinct channels",
+          "total": "Total messages",
+          "totalSubtitle": "All-time count"
+        },
+        "dlqTrend": {
+          "subtitle": "Recent DLQ activity by hour",
+          "title": "DLQ trend"
+        },
+        "flow": {
+          "subtitle": "Last 24 hours, hourly buckets",
+          "title": "Message flow"
+        },
+        "subtitle": "Aggregate health and throughput across all subjects.",
+        "title": "System Reports"
+      },
+      "threats": {
+        "cards": {
+          "active": "Active threats",
+          "activeSubtitle": "Endpoints with active threats",
+          "firewallOff": "Firewall off",
+          "firewallOffSubtitle": "Endpoints with firewall disabled",
+          "outdatedAgent": "Outdated agents",
+          "outdatedAgentSubtitle": "Below latest version",
+          "total": "Endpoints scanned",
+          "totalSubtitle": "Most recent SentinelOne payload",
+          "vulnerable": "Vulnerable",
+          "vulnerableSubtitle": "Pending patches"
+        },
+        "empty": "No SentinelOne payload available yet.",
+        "subject": "Source subject: {subject}",
+        "subtitle": "Endpoint security posture from the latest SentinelOne payload.",
+        "table": {
+          "agentVersion": "Agent",
+          "computerName": "Endpoint",
+          "lastActiveDate": "Last active",
+          "osType": "OS",
+          "status": "Status",
+          "title": "At-risk endpoints"
+        },
+        "title": "Threat Telemetry"
+      }
     }
   },
   "relative": {
@@ -327,12 +433,21 @@
     "seconds": "{count}s"
   },
   "sidebar": {
+    "group": {
+      "admin": "Administration",
+      "monitoring": "Monitoring",
+      "reporting": "Reporting"
+    },
     "menu": {
-      "collectors": "Collectors",
       "dashboard": "Dashboard",
       "data": "Data Flows",
       "dlq": "Dead Letter Queue",
-      "profile": "Profile"
+      "flows": "Flows",
+      "profile": "Profile",
+      "reportsFlowPerformance": "Flow Performance",
+      "reportsSubjects": "Subject Reports",
+      "reportsSystem": "System Reports",
+      "reportsThreats": "Threat Telemetry"
     }
   },
   "theme": {
@@ -346,5 +461,47 @@
     "required": "This field is required.",
     "tooLong": "Value is too long.",
     "urlInvalid": "Enter a valid URL."
+  },
+  "widgets": {
+    "actions": {
+      "done": "Done",
+      "drag": "Drag",
+      "edit": "Edit layout",
+      "maximize": "Maximize",
+      "remove": "Remove",
+      "reset": "Reset"
+    },
+    "dashboard": {
+      "dlq": "DLQ entries",
+      "last24h": "Last 24h",
+      "messageFlow": "Message flow",
+      "subjectFlow": "Live subject flows",
+      "subjectsTable": "Subjects",
+      "totalMessages": "Total messages"
+    },
+    "flowDetail": {
+      "info": "Flow info",
+      "recentMessages": "Recent messages",
+      "recentMessagesEmpty": "No recent messages.",
+      "recentMessagesNoSubject": "Flow has no NATS subject.",
+      "runStats": "Run stats",
+      "runTimeline": "Run timeline",
+      "subjectFlow": "Subject activity (last 24h)",
+      "subjectFlowNoSubject": "Flow has no NATS subject."
+    },
+    "flowPerf": {
+      "noFlows": "No flows yet.",
+      "table": "Flows",
+      "topErrors": "Top errors"
+    },
+    "system": {
+      "activeFlows": "Active flows",
+      "dlq": "DLQ",
+      "dlqTrend": "DLQ trend",
+      "last24h": "Last 24h",
+      "messageFlow": "Message flow",
+      "subjects": "Subjects",
+      "total": "Total messages"
+    }
   }
 }

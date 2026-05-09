@@ -10,6 +10,7 @@ import {
   subjectFreshness,
 } from "@/features/data/domain/bucket-aggregation";
 import type { PayloadSummary, SubjectStats } from "@/features/data/types/data";
+import { useRelativeLabels } from "@/hooks/use-relative-labels";
 import { pageRoutes } from "@/lib/const/pages";
 import { formatRelative } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -39,14 +40,7 @@ function buildEntries(
 
 export function SubjectFlowGrid({ payloads, subjects }: SubjectFlowGridProps) {
   const t = useTranslations("page.dashboard.subjectFlows");
-  const tRelative = useTranslations("relative");
-
-  const relativeLabels = {
-    days: tRelative("days"),
-    hours: tRelative("hours"),
-    minutes: tRelative("minutes"),
-    seconds: tRelative("seconds"),
-  };
+  const relativeLabels = useRelativeLabels();
 
   const bucketsBySubject = useMemo(
     () => bucketByHourBySubject(payloads),

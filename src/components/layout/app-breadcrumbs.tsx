@@ -22,7 +22,11 @@ type BreadcrumbEntry = {
 const routeDefinitions = [
   { key: "dashboard", path: pageRoutes.home },
   { key: "data", path: pageRoutes.data },
-  { key: "collectors", path: pageRoutes.collectors },
+  { key: "reportsSystem", path: pageRoutes.reportsSystem },
+  { key: "reportsSubjects", path: pageRoutes.reportsSubjects },
+  { key: "reportsFlowPerformance", path: pageRoutes.reportsFlowPerformance },
+  { key: "reportsThreats", path: pageRoutes.reportsThreats },
+  { key: "flows", path: pageRoutes.flows },
   { key: "dlq", path: pageRoutes.dlq },
   { key: "profile", path: pageRoutes.profile },
 ];

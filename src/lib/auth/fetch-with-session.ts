@@ -2,7 +2,8 @@ import { refreshSession } from "@/lib/auth/refresh-session";
 import { getSession } from "@/lib/open-id";
 
 const MS_PER_SECOND = 1000;
-const REFRESH_BUFFER_MS = 60 * MS_PER_SECOND;
+const REFRESH_BUFFER_SECONDS = 180;
+const REFRESH_BUFFER_MS = REFRESH_BUFFER_SECONDS * MS_PER_SECOND;
 
 export async function fetchWithSessionAuth(
   url: string,
