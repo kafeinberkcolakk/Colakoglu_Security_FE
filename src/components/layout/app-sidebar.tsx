@@ -2,14 +2,16 @@
 
 import {
   Activity,
-  BarChart3,
-  Gauge,
-  Inbox,
+  ClipboardList,
+  FileBarChart,
   LayoutDashboard,
   type LucideIcon,
   Menu,
-  ShieldAlert,
-  TrendingUp,
+  PackagePlus,
+  PencilRuler,
+  PlayCircle,
+  UserCog,
+  UserSearch,
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
@@ -45,39 +47,53 @@ const NAV_GROUPS: NavGroup[] = [
     groupKey: "monitoring",
     items: [
       { href: pageRoutes.home, icon: LayoutDashboard, labelKey: "dashboard" },
-      { href: pageRoutes.data, icon: Activity, labelKey: "data" },
-    ],
-  },
-  {
-    groupKey: "reporting",
-    items: [
-      {
-        href: pageRoutes.reportsSystem,
-        icon: Gauge,
-        labelKey: "reportsSystem",
-      },
-      {
-        href: pageRoutes.reportsSubjects,
-        icon: BarChart3,
-        labelKey: "reportsSubjects",
-      },
-      {
-        href: pageRoutes.reportsFlowPerformance,
-        icon: TrendingUp,
-        labelKey: "reportsFlowPerformance",
-      },
-      {
-        href: pageRoutes.reportsThreats,
-        icon: ShieldAlert,
-        labelKey: "reportsThreats",
-      },
-    ],
-  },
-  {
-    groupKey: "admin",
-    items: [
+      { href: pageRoutes.dataProducts, icon: Activity, labelKey: "data" },
       { href: pageRoutes.flows, icon: Workflow, labelKey: "flows" },
-      { href: pageRoutes.dlq, icon: Inbox, labelKey: "dlq" },
+    ],
+  },
+  {
+    groupKey: "workflow",
+    items: [
+      {
+        href: pageRoutes.flowgroModeller,
+        icon: PencilRuler,
+        labelKey: "flowgroModeller",
+      },
+      {
+        href: pageRoutes.flowgroDeployment,
+        icon: PackagePlus,
+        labelKey: "flowgroDeployment",
+      },
+      {
+        href: pageRoutes.flowgroProcessCockpit,
+        icon: Workflow,
+        labelKey: "flowgroProcessCockpit",
+      },
+      {
+        href: pageRoutes.flowgroMyTasks,
+        icon: ClipboardList,
+        labelKey: "flowgroMyTasks",
+      },
+      {
+        href: pageRoutes.flowgroFlowExecution,
+        icon: PlayCircle,
+        labelKey: "flowgroFlowExecution",
+      },
+      {
+        href: pageRoutes.flowgroCamundaUser,
+        icon: UserCog,
+        labelKey: "flowgroCamundaUser",
+      },
+      {
+        href: pageRoutes.flowgroAllProcessReport,
+        icon: FileBarChart,
+        labelKey: "flowgroAllProcessReport",
+      },
+      {
+        href: pageRoutes.flowgroUserReport,
+        icon: UserSearch,
+        labelKey: "flowgroUserReport",
+      },
     ],
   },
 ];
@@ -97,7 +113,7 @@ function SidebarHeaderContent() {
       </button>
       {isExpanded && (
         <div className="flex size-7 shrink-0 items-center justify-center rounded border border-white/20 bg-white/10 text-sm font-bold text-white select-none">
-          KP
+          C-S
         </div>
       )}
     </div>

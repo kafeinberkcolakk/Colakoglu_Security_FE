@@ -1,3 +1,4 @@
+import { deriveProductName } from "@/features/data/services/payload-derivation";
 import type {
   DataStats,
   PayloadDetail,
@@ -29,12 +30,18 @@ export function fromWireSubject(wire: WireSubjectStats): SubjectStats {
 }
 
 export function fromWirePayload(wire: WirePayloadSummary): PayloadSummary {
+  const productName =
+    typeof wire.productName === "string" && wire.productName.length > 0
+      ? wire.productName
+      : deriveProductName(wire.payload);
   return {
     hasJson: wire.hasJson,
     id: wire.id,
     jsonSize: wire.jsonSize,
     messageId: wire.messageId,
+    payload: wire.payload,
     payloadSize: wire.jsonSize + wire.rawSize,
+    productName,
     rawSize: wire.rawSize,
     receivedAt: wire.receivedAt,
     subject: wire.subject,
@@ -55,11 +62,16 @@ export function fromWireList(wire: WirePayloadListResponse): PayloadPage {
 }
 
 export function fromWireDetail(wire: WirePayloadDetail): PayloadDetail {
+  const productName =
+    typeof wire.productName === "string" && wire.productName.length > 0
+      ? wire.productName
+      : deriveProductName(wire.payload);
   return {
     hasRaw: wire.hasRaw,
     id: wire.id,
     messageId: wire.messageId,
     payload: wire.payload,
+    productName,
     rawSize: wire.rawSize,
     receivedAt: wire.receivedAt,
     subject: wire.subject,

@@ -24,6 +24,7 @@ const DEFAULT_SUBJECTS_LIMIT = 100;
 interface PayloadsWireQuery {
   limit: number;
   offset: number;
+  productName?: string;
   since?: string;
   subject?: string;
 }
@@ -35,11 +36,14 @@ function toWireQuery(query: PayloadListQuery): PayloadsWireQuery {
     limit: size,
     offset: page * size,
   };
-  if (query.subject !== undefined) {
+  if (query.subject !== undefined && query.subject !== "") {
     params.subject = query.subject;
   }
-  if (query.from !== undefined) {
+  if (query.from !== undefined && query.from !== "") {
     params.since = query.from;
+  }
+  if (query.productName !== undefined && query.productName !== "") {
+    params.productName = query.productName;
   }
   return params;
 }

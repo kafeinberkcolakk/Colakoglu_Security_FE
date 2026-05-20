@@ -6,9 +6,9 @@
   },
   "core": {
     "active": "Aktif",
-    "backendDown": "Backend erişilemez",
+    "backendDown": "Backend'e ulaşılamıyor",
     "backendUp": "Backend sağlıklı",
-    "cancel": "Vazgeç",
+    "cancel": "İptal",
     "clear": "Temizle",
     "close": "Kapat",
     "confirmDelete": "Seçili kayıtlar silinsin mi?",
@@ -16,20 +16,20 @@
     "create": "Oluştur",
     "detail": "Detay",
     "edit": "Düzenle",
-    "enter": "Giriş Yap",
+    "enter": "Giriş",
     "export": "Dışa aktar",
     "filters": "Filtreler",
     "inactive": "Pasif",
     "language": "Dil",
     "loading": "Yükleniyor...",
     "new": "Yeni",
-    "next": "İleri",
+    "next": "Sonraki",
     "no": "Hayır",
-    "noData": "Görüntülenecek veri bulunmuyor.",
-    "noPermission": "Bu içeriği görüntülemek için yetkiniz yok.",
+    "noData": "Veri bulunamadı.",
+    "noPermission": "Bu içeriği görmek için yetkiniz yok.",
     "page": "Sayfa",
-    "previous": "Geri",
-    "rowsPerPage": "Sayfa başına kayıt",
+    "previous": "Önceki",
+    "rowsPerPage": "Sayfa başına satır",
     "save": "Kaydet",
     "search": "Ara",
     "submit": "Gönder",
@@ -50,49 +50,47 @@
   "page": {
     "authError": {
       "actions": {
-        "retry": "Tekrar giriş yapmayı dene"
+        "retry": "Tekrar giriş yap"
       },
-      "description": "Kimlik doğrulama tamamlanamadı. Kimlik sağlayıcı yapılandırmasını kontrol edip tekrar deneyin.",
+      "description": "Kimlik doğrulama tamamlanamadı. Identity provider ayarlarını kontrol edip tekrar deneyin.",
       "title": "Kimlik doğrulama hatası"
     },
     "dashboard": {
-      "activeFlows": "Diğer veri akışları",
       "cards": {
-        "dlq": "DLQ kayıtları",
-        "dlqAttention": "İlgi gerektiriyor",
-        "dlqHealthy": "Sağlıklı",
+        "activeFlows": "Aktif flow'lar",
+        "activeFlowsSubtitle": "Toplam {total} branch",
         "last24h": "Son 24 saat",
         "last24hSubtitle": "Alınan mesajlar",
         "total": "Toplam mesaj",
-        "totalSubtitle": "Tüm subject'ler"
+        "totalSubtitle": "Tüm ürünler"
       },
       "flow": {
-        "subtitle": "Son 24 saat, saatlik bucket",
+        "subtitle": "Son 24 saat, saatlik bucket'lar",
         "title": "Mesaj akışı"
       },
       "live": "● CANLI",
-      "subjectFlows": {
-        "empty": "Son 24 saatte subject aktivitesi yok.",
+      "productFlows": {
+        "empty": "Son 24 saatte ürün aktivitesi yok.",
         "messageCount": "{count} mesaj",
-        "subtitle": "Canlı, son 24 saat",
-        "title": "Canlı veri akışları"
+        "subtitle": "Canlı, son 24 sa",
+        "title": "Canlı ürünler"
       },
       "title": "Genel Bakış"
     },
     "data": {
       "live": {
         "activity": {
-          "title": "Aktivite (son 24 saat)"
+          "title": "Aktivite (son 24sa)"
         },
         "export": {
-          "empty": "Dışa aktarılacak kayıt yok."
+          "empty": "Aktarılacak satır yok."
         },
         "messages": {
           "title": "Mesajlar"
         },
         "stats": {
-          "last": "Son geliş",
-          "lastSubtitle": "En yeni mesaj",
+          "last": "Son alınan",
+          "lastSubtitle": "En son mesaj",
           "total": "Toplam mesaj",
           "totalSubtitle": "Tüm zamanlar"
         },
@@ -104,7 +102,8 @@
         "table": {
           "isJson": "Format",
           "payloadSize": "Boyut",
-          "receivedAt": "Geliş zamanı"
+          "productName": "Ürün",
+          "receivedAt": "Alınma zamanı"
         }
       },
       "payload": {
@@ -119,200 +118,108 @@
           "formatRaw": "Ham bayt",
           "id": "ID",
           "messageId": "Mesaj ID",
-          "receivedAt": "Geliş zamanı",
+          "productName": "Ürün adı",
+          "receivedAt": "Alınma zamanı",
           "size": "Boyut",
           "subject": "Subject"
         },
         "payload": {
-          "empty": "Payload mevcut değil.",
-          "large": "Bu mesaj büyük ({size}). İncelemek için ham byte indir.",
-          "title": "Payload"
+          "empty": "Payload bulunamadı.",
+          "large": "Bu mesaj büyük ({size}). İncelemek için ham veriyi indirin.",
+          "title": "Tam payload"
+        },
+        "response": {
+          "title": "Response (payload gövdesi)"
         },
         "title": "Mesaj detayı"
+      },
+      "products": {
+        "detail": {
+          "copyWebhook": "Webhook URL'sini kopyala",
+          "webhookCopied": "Webhook URL kopyalandı.",
+          "webhookCopyFailed": "URL kopyalanamadı."
+        },
+        "filter": {
+          "productName": "Ürün"
+        },
+        "subtitle": "Her ürün service.payload kanalını besleyen mantıksal bir veri kaynağıdır.",
+        "table": {
+          "lastReceivedAt": "Son alınan",
+          "messageCount": "Mesajlar",
+          "productName": "Ürün"
+        },
+        "title": "Veri kaynakları"
       },
       "subjects": {
         "filter": {
           "subject": "Subject"
         },
         "table": {
-          "lastReceivedAt": "Son geliş",
-          "messageCount": "Mesaj sayısı",
+          "lastReceivedAt": "Son alınan",
+          "messageCount": "Mesajlar",
           "subject": "Subject"
         },
-        "title": "Veri Akışları"
+        "title": "Subject'ler"
       }
     },
-    "dlq": {
-      "delete": {
-        "confirm": "Bu DLQ kaydı kalıcı olarak silinecek.",
-        "title": "DLQ kaydı silinsin mi?"
+    "flowgro": {
+      "allProcessReport": {
+        "title": "Tüm Süreç Raporu"
       },
-      "detail": {
-        "consumer": "Tüketici",
-        "errorMessage": "Hata mesajı",
-        "occurredAt": "Oluşma zamanı",
-        "originalSubject": "Orijinal subject",
-        "payloadBytes": "Payload boyutu",
-        "retriedAt": "Son yeniden deneme",
-        "retryCount": "Deneme sayısı",
-        "title": "DLQ kaydı detayı"
+      "camundaUser": {
+        "title": "Camunda Kullanıcıları"
       },
-      "filter": {
-        "consumer": "Tüketici",
-        "errorMessage": "Hata mesajı",
-        "originalSubject": "Orijinal subject"
+      "deployment": {
+        "title": "Dağıtım"
       },
-      "table": {
-        "consumer": "Tüketici",
-        "errorMessage": "Hata mesajı",
-        "occurredAt": "Oluşma zamanı",
-        "originalSubject": "Orijinal subject",
-        "retryCount": "Deneme"
+      "flowExecution": {
+        "title": "Akış Yürütme"
       },
-      "title": "Dead Letter Queue",
-      "toast": {
-        "deleteError": "DLQ kaydı silinemedi.",
-        "deleteSuccess": "DLQ kaydı silindi.",
-        "retryError": "DLQ kaydı yeniden denenemedi.",
-        "retrySuccess": "DLQ kaydı yeniden kuyruğa alındı."
+      "loading": "İş akışı modülü yükleniyor…",
+      "missingConfig": "İş akışı UI'ı yapılandırılmadı (FLOWGRO_UI_URL).",
+      "modeller": {
+        "title": "BPMN Tasarımcı"
+      },
+      "myTasks": {
+        "title": "Görevlerim"
+      },
+      "processCockpit": {
+        "title": "Süreç Cockpit"
+      },
+      "userReport": {
+        "title": "Kullanıcı Raporu"
       }
     },
     "flows": {
-      "delete": {
-        "confirm": "\"{name}\" flow'u çalışma geçmişiyle birlikte kalıcı olarak silinecek.",
-        "title": "Flow silinsin mi?"
-      },
       "detail": {
         "info": {
-          "code": "Webhook kodu",
-          "cronExpression": "Cron ifadesi",
-          "enabled": "Durum",
-          "natsSubject": "NATS subject"
-        },
-        "run": "Şimdi çalıştır",
-        "runs": {
-          "title": "Çalışma geçmişi"
-        },
-        "stats": {
-          "avgDuration": "Ort. süre",
-          "lastError": "Son hata",
-          "messagesSubtitle": "Mesaj: {count}",
-          "noError": "Hata kaydı yok.",
-          "p95Duration": "p95 süre",
-          "p95Subtitle": "Son çalışmalar üzerinden",
-          "successRate": "Başarı oranı",
-          "totalRuns": "{count} çalışma"
+          "active": "Durum",
+          "currentStep": "Geçerli adım",
+          "endpoint": "Endpoint",
+          "intervalSeconds": "Periyot",
+          "lastIngestedAt": "Son ingest",
+          "name": "Branch",
+          "retries": "Retry"
         },
         "title": "Flow detayı"
       },
       "filter": {
-        "name": "Ad",
-        "natsSubject": "NATS subject",
-        "type": "Tip"
-      },
-      "form": {
-        "config": {
-          "dbQuery": {
-            "fetchSize": "Getirme boyutu",
-            "jdbcUrl": "JDBC URL",
-            "jdbcUrlPlaceholder": "jdbc:postgresql://host:5432/db",
-            "password": "Şifre",
-            "passwordPlaceholder": "Şifrenizi girin",
-            "sql": "SQL",
-            "sqlPlaceholder": "SELECT id, name FROM ...",
-            "username": "Kullanıcı adı",
-            "usernamePlaceholder": "Veritabanı kullanıcısı"
-          },
-          "fileSftp": {
-            "filePattern": "Dosya deseni (regex)",
-            "filePatternPlaceholder": ".*\\.csv$",
-            "host": "Sunucu",
-            "hostPlaceholder": "sftp.example.com",
-            "moveAfterDownload": "İşlenen dosyaları taşı",
-            "password": "Şifre",
-            "passwordPlaceholder": "Şifrenizi girin",
-            "port": "Port",
-            "processedDir": "İşlenmiş dizini",
-            "processedDirPlaceholder": "/inbox/processed",
-            "remoteDir": "Uzak dizin",
-            "remoteDirPlaceholder": "/inbox",
-            "username": "Kullanıcı adı",
-            "usernamePlaceholder": "SFTP kullanıcısı"
-          },
-          "httpRest": {
-            "body": "Gövde",
-            "bodyPlaceholder": "Opsiyonel istek gövdesi",
-            "headerKeyPlaceholder": "Header adı",
-            "headers": "Header'lar",
-            "headerValuePlaceholder": "Header değeri",
-            "method": "HTTP metodu",
-            "url": "URL",
-            "urlPlaceholder": "https://api.example.com/data"
-          },
-          "title": "Yapılandırma",
-          "webhook": {
-            "hint": "Webhook flow'lar dış sistemler tarafından tetiklenir. Yapılandırma gerekmez."
-          }
-        },
-        "cronExpression": "Cron ifadesi",
-        "cronHint": "Spring 6-alan cron formatı. On-demand için boş bırakın.",
-        "cronPlaceholder": "0 */5 * * * *",
-        "description": "Açıklama",
-        "descriptionPlaceholder": "Bu flow hakkında opsiyonel notlar",
-        "enabled": "Aktif",
-        "name": "Ad",
-        "namePlaceholder": "sentinelone-scheduled",
-        "natsSubject": "NATS subject",
-        "natsSubjectPlaceholder": "edr.sentinelone.scheduled",
-        "secret": {
-          "changeToggle": "Secret'ı değiştir",
-          "hint": "Dış sistemlerin webhook çağrılarını doğrulamak için kullanılır. Mevcut secret'ı silmek için boş bırakın.",
-          "keepHint": "Mevcut secret korunacak.",
-          "label": "Secret",
-          "placeholder": "Secret girin",
-          "title": "Secret"
-        },
-        "titleEdit": "Flow'u Düzenle",
-        "titleNew": "Yeni Flow",
-        "type": "Tip",
-        "typeLocked": "Oluşturulduktan sonra tip değiştirilemez."
+        "name": "Ad"
       },
       "table": {
-        "cronExpression": "Cron ifadesi",
-        "enabled": "Durum",
+        "active": "Durum",
+        "currentStep": "Geçerli adım",
+        "endpoint": "Endpoint",
+        "intervalSeconds": "Periyot",
+        "lastIngestedAt": "Son ingest",
         "name": "Ad",
-        "natsSubject": "NATS subject",
-        "type": "Tip"
+        "retries": "Retry"
       },
-      "title": "Flow'lar",
-      "toast": {
-        "createError": "Flow oluşturulamadı.",
-        "createSuccess": "Flow oluşturuldu.",
-        "deleteError": "Flow silinemedi.",
-        "deleteSuccess": "Flow silindi.",
-        "runError": "Flow tetiklenemedi.",
-        "runSuccess": "Flow tetiklendi.",
-        "updateError": "Flow güncellenemedi.",
-        "updateSuccess": "Flow güncellendi."
-      },
-      "toolbar": {
-        "new": "Flow Ekle"
-      },
-      "triggerTypes": {
-        "MANUAL": "Manuel",
-        "SCHEDULE": "Zamanlanmış",
-        "WEBHOOK": "Webhook"
-      },
-      "types": {
-        "db_query_collector": "Veritabanı Sorgusu",
-        "file_sftp_collector": "SFTP Dosya",
-        "http_rest_collector": "HTTP REST",
-        "webhook_collector": "Webhook"
-      }
+      "title": "Flow'lar"
     },
     "profile": {
       "form": {
-        "confirmPassword": "Şifre Tekrar",
+        "confirmPassword": "Şifre Tekrarı",
         "currentPassword": "Mevcut Şifre",
         "email": "E-posta",
         "firstName": "Ad",
@@ -331,99 +238,6 @@
         "updateError": "Profil güncellenemedi.",
         "updateSuccess": "Profil başarıyla güncellendi."
       }
-    },
-    "reports": {
-      "flowPerformance": {
-        "empty": "Henüz flow yok.",
-        "stats": {
-          "avgDuration": "Ort. süre",
-          "lastError": "Son hata",
-          "noError": "—",
-          "p95Duration": "p95",
-          "successRate": "Başarı",
-          "totalRuns": "Çalışma"
-        },
-        "subtitle": "Seçilen pencere boyunca flow başına çalışma performansı.",
-        "table": {
-          "avgMs": "Ort. (ms)",
-          "lastError": "Son hata",
-          "lastRun": "Son çalışma",
-          "name": "Flow",
-          "p95Ms": "p95 (ms)",
-          "successRate": "Başarı oranı",
-          "totalRuns": "Çalışma",
-          "type": "Tip"
-        },
-        "title": "Flow Performansı"
-      },
-      "subjects": {
-        "activity": {
-          "title": "Saatlik aktivite"
-        },
-        "empty": "Aktiviteyi incelemek için bir subject seçin.",
-        "noSubjects": "Henüz subject yok.",
-        "selector": {
-          "label": "Subject",
-          "placeholder": "Bir subject seçin"
-        },
-        "stats": {
-          "last": "Son geliş",
-          "total": "Mesaj"
-        },
-        "subtitle": "Subject başına hacim ve zamanlama.",
-        "title": "Subject Raporları"
-      },
-      "system": {
-        "cards": {
-          "activeFlows": "Aktif flow",
-          "activeFlowsSubtitle": "Şu anda etkin",
-          "dlq": "DLQ kayıtları",
-          "dlqHealthy": "Sağlıklı",
-          "dlqNeedsAttention": "İlgi gerektiriyor",
-          "last24h": "Son 24 saat",
-          "last24hSubtitle": "Alınan mesajlar",
-          "subjects": "Subject sayısı",
-          "subjectsSubtitle": "Farklı kanal",
-          "total": "Toplam mesaj",
-          "totalSubtitle": "Tüm zamanlar"
-        },
-        "dlqTrend": {
-          "subtitle": "Saatlik DLQ aktivitesi",
-          "title": "DLQ trendi"
-        },
-        "flow": {
-          "subtitle": "Son 24 saat, saatlik bucket",
-          "title": "Mesaj akışı"
-        },
-        "subtitle": "Tüm subject'ler genelinde toplu sağlık ve hacim.",
-        "title": "Sistem Raporları"
-      },
-      "threats": {
-        "cards": {
-          "active": "Aktif tehdit",
-          "activeSubtitle": "Aktif tehditi olan endpoint",
-          "firewallOff": "Firewall kapalı",
-          "firewallOffSubtitle": "Firewall'u kapalı endpoint",
-          "outdatedAgent": "Eski ajanlar",
-          "outdatedAgentSubtitle": "Son sürümün altında",
-          "total": "Taranan endpoint",
-          "totalSubtitle": "En son SentinelOne payload'u",
-          "vulnerable": "Açıklı",
-          "vulnerableSubtitle": "Bekleyen yamalar"
-        },
-        "empty": "Henüz SentinelOne payload'u yok.",
-        "subject": "Kaynak subject: {subject}",
-        "subtitle": "En son SentinelOne payload'undan endpoint güvenlik durumu.",
-        "table": {
-          "agentVersion": "Ajan",
-          "computerName": "Endpoint",
-          "lastActiveDate": "Son aktif",
-          "osType": "İşletim Sistemi",
-          "status": "Durum",
-          "title": "Risk altındaki endpoint'ler"
-        },
-        "title": "Tehdit Telemetrisi"
-      }
     }
   },
   "relative": {
@@ -434,20 +248,22 @@
   },
   "sidebar": {
     "group": {
-      "admin": "Yönetim",
       "monitoring": "İzleme",
-      "reporting": "Raporlama"
+      "workflow": "İş Akışı"
     },
     "menu": {
       "dashboard": "Genel Bakış",
-      "data": "Veri Akışları",
-      "dlq": "Dead Letter Queue",
+      "data": "Veri Kaynakları",
+      "flowgroAllProcessReport": "Tüm Süreç Raporu",
+      "flowgroCamundaUser": "Camunda Kullanıcıları",
+      "flowgroDeployment": "Dağıtım",
+      "flowgroFlowExecution": "Akış Yürütme",
+      "flowgroModeller": "BPMN Tasarımcı",
+      "flowgroMyTasks": "Görevlerim",
+      "flowgroProcessCockpit": "Süreç Cockpit",
+      "flowgroUserReport": "Kullanıcı Raporu",
       "flows": "Flow'lar",
-      "profile": "Profil",
-      "reportsFlowPerformance": "Flow Performansı",
-      "reportsSubjects": "Subject Raporları",
-      "reportsSystem": "Sistem Raporları",
-      "reportsThreats": "Tehdit Telemetrisi"
+      "profile": "Profil"
     }
   },
   "theme": {
@@ -457,10 +273,8 @@
   "validation": {
     "noValidEmail": "Geçersiz e-posta adresi.",
     "passwordMismatch": "Şifreler eşleşmiyor.",
-    "positiveInt": "Pozitif tamsayı olmalıdır.",
     "required": "Bu alan zorunludur.",
-    "tooLong": "Değer çok uzun.",
-    "urlInvalid": "Geçerli bir URL girin."
+    "tooLong": "Değer çok uzun."
   },
   "widgets": {
     "actions": {
@@ -471,37 +285,25 @@
       "remove": "Kaldır",
       "reset": "Sıfırla"
     },
+    "chartTypes": {
+      "area": "Alan",
+      "bar": "Çubuk",
+      "legend": "Grafik tipi"
+    },
     "dashboard": {
-      "dlq": "DLQ kayıtları",
+      "activeFlows": "Aktif flow'lar",
       "last24h": "Son 24 saat",
       "messageFlow": "Mesaj akışı",
-      "subjectFlow": "Canlı subject akışları",
-      "subjectsTable": "Subject'ler",
+      "productFlow": "Canlı ürünler",
+      "productsTable": "Diğer ürünler",
       "totalMessages": "Toplam mesaj"
     },
     "flowDetail": {
-      "info": "Flow bilgisi",
+      "activityEmpty": "Son 24 saatte aktivite yok.",
+      "info": "Branch bilgisi",
+      "productActivity": "Aktivite (son 24 sa)",
       "recentMessages": "Son mesajlar",
-      "recentMessagesEmpty": "Son mesaj yok.",
-      "recentMessagesNoSubject": "Flow'un NATS subject'i yok.",
-      "runStats": "Çalışma istatistikleri",
-      "runTimeline": "Çalışma zaman çizelgesi",
-      "subjectFlow": "Subject aktivitesi (son 24 sa)",
-      "subjectFlowNoSubject": "Flow'un NATS subject'i yok."
-    },
-    "flowPerf": {
-      "noFlows": "Henüz flow yok.",
-      "table": "Flow'lar",
-      "topErrors": "Üst hatalar"
-    },
-    "system": {
-      "activeFlows": "Aktif flow",
-      "dlq": "DLQ",
-      "dlqTrend": "DLQ trendi",
-      "last24h": "Son 24 saat",
-      "messageFlow": "Mesaj akışı",
-      "subjects": "Subject sayısı",
-      "total": "Toplam mesaj"
+      "recentMessagesEmpty": "Son mesaj yok."
     }
   }
 }

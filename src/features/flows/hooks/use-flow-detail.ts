@@ -1,13 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { flowsApi } from "@/features/flows/api/flows-api";
+import { useFlowsList } from "@/features/flows/hooks/use-flows-list";
+import type { Flow } from "@/features/flows/types/flow";
 
-export const flowDetailKey = (flowId: number) =>
-  ["flows", "detail", flowId] as const;
-
-export function useFlowDetail(flowId: number) {
-  return useQuery({
-    enabled: Number.isFinite(flowId) && flowId > 0,
-    queryFn: () => flowsApi.detail(flowId),
-    queryKey: flowDetailKey(flowId),
-  });
+export function useFlowDetail(flowName: string): {
+  data: Flow | undefined;
+  isLoading: boolean;
+} {
+  const query = useFlowsList();
+  const data = query.data?.items.find((flow) => flow.name === flowName);
+  return { data, isLoading: query.isLoading };
 }

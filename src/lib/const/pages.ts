@@ -1,18 +1,22 @@
 export const pageRoutes = {
   authError: "/auth/error",
   data: "/data",
-  dlq: "/dlq",
-  flowDetail: (flowId: number | string) => `/flows/${flowId}`,
-  flowEdit: (flowId: number | string) => `/flows/${flowId}/edit`,
-  flowNew: "/flows/new",
+  dataProductDetail: (productName: string) =>
+    `/data/products/${encodeURIComponent(productName)}`,
+  dataProducts: "/data/products",
+  flowDetail: (flowName: string) => `/flows/${encodeURIComponent(flowName)}`,
+  flowgroAllProcessReport: "/flowgro-ui/all-process-report",
+  flowgroCamundaUser: "/flowgro-ui/camunda-user",
+  flowgroDeployment: "/flowgro-ui/deployment",
+  flowgroFlowExecution: "/flowgro-ui/flow-execution",
+  flowgroModeller: "/flowgro-ui/modeller",
+  flowgroMyTasks: "/flowgro-ui/my-tasks",
+  flowgroProcessCockpit: "/flowgro-ui/process-cockpit",
+  flowgroUserReport: "/flowgro-ui/user-report",
   flows: "/flows",
   home: "/",
   messageDetail: (messageId: string) => `/data/messages/${messageId}`,
   profile: "/profile",
-  reportsFlowPerformance: "/reports/flow-performance",
-  reportsSubjects: "/reports/subjects",
-  reportsSystem: "/reports/system",
-  reportsThreats: "/reports/threats",
   subjectDetail: (subject: string) => `/data/${encodeURIComponent(subject)}`,
 };
 
@@ -33,24 +37,14 @@ export const beApiRoutes = {
     stats: "/api/data/stats",
     subjects: "/api/data/subjects",
   },
-  dlq: {
-    base: "/api/dlq",
-    detail: (dlqId: string) => `/api/dlq/${dlqId}`,
-    retry: (dlqId: string) => `/api/dlq/${dlqId}/retry`,
-  },
   flow: {
     list: "/api/flows",
-    runs: (flowId: number) =>
-      `/flowgro/v1/flow-execution-scheduler/${flowId}/runs`,
-    schedulerById: (flowId: number) =>
-      `/flowgro/v1/flow-execution-scheduler/${flowId}`,
-    schedulerEnabled: (flowId: number) =>
-      `/flowgro/v1/flow-execution-scheduler/${flowId}/enabled`,
-    schedulerRoot: "/flowgro/v1/flow-execution-scheduler",
-    schedulerRun: (flowId: number) =>
-      `/flowgro/v1/flow-execution-scheduler/run/${flowId}`,
   },
   health: "/actuator/health",
+  integration: {
+    collectorEvents: (productName: string) =>
+      `/flowgro/integration/v1/collector-events/${productName}`,
+  },
   user: {
     changePassword: "/api/users/me/password",
     me: "/api/users/me",
@@ -60,3 +54,5 @@ export const beApiRoutes = {
     permissions: "/api/users/me/permissions",
   },
 };
+
+export const SERVICE_PAYLOAD_SUBJECT = "service.payload";

@@ -3,30 +3,26 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { useMemo, useState } from "react";
+import {
+  BUCKET_CHART_TYPES,
+  BucketChart,
+  type BucketChartType,
+} from "@/components/charts/bucket-chart";
+import { ChartTypePicker } from "@/components/charts/chart-type-picker";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type WidgetRegistry, WidgetState } from "@/components/widgets";
-import { MessageFlowChart } from "@/features/data/_components/message-flow-chart";
 import { bucketByHour } from "@/features/data/domain/bucket-aggregation";
 import { usePayloads } from "@/features/data/hooks/use-payloads";
-import { RunsTimeline } from "@/features/flows/_components/runs-timeline";
-import {
-  avgDurationMs,
-  lastErrorMessage,
-  p95DurationMs,
-  successRate,
-} from "@/features/flows/domain/run-aggregations";
 import { useFlowDetail } from "@/features/flows/hooks/use-flow-detail";
-import { useFlowRuns } from "@/features/flows/hooks/use-flow-runs";
-import { getNatsSubject } from "@/features/flows/services/flow-accessors";
 import { FLOW_CHART_BUCKET_LIMIT } from "@/lib/const/intervals";
-import { computeLast24hIso } from "@/lib/format";
-import { truncate } from "@/lib/utils";
+import { SERVICE_PAYLOAD_SUBJECT } from "@/lib/const/pages";
+import { computeLast24hIso, formatDate } from "@/lib/format";
 
 const RECENT_PAYLOADS_LIMIT = 20;
-const ERROR_TRUNCATE = 80;
 
 interface FlowWidgetProps {
-  flowId: number;
+  flowName: string;
+  isMaximized?: boolean;
 }
 
 function InfoRow({ label, value }: { label: string; value: string }) {
@@ -38,120 +34,60 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function InfoWidget({ flowId }: FlowWidgetProps) {
+function InfoWidget({ flowName }: FlowWidgetProps) {
   const t = useTranslations("page.flows.detail.info");
   const tCore = useTranslations("core");
-  const flowQuery = useFlowDetail(flowId);
+  const flowQuery = useFlowDetail(flowName);
   const flow = flowQuery.data;
 
   return (
     <WidgetState isLoading={flowQuery.isLoading || !flow}>
       {flow && (
-        <dl className="grid grid-cols-1 gap-3 text-sm">
+        <dl className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
+          <InfoRow label={t("name")} value={flow.name} />
+          <InfoRow label={t("endpoint")} value={flow.endpoint} />
           <InfoRow
-            label={t("natsSubject")}
-            value={getNatsSubject(flow) || "—"}
+            label={t("intervalSeconds")}
+            value={`${flow.intervalSeconds}s`}
+          />
+          <InfoRow label={t("currentStep")} value={flow.currentStep ?? "—"} />
+          <InfoRow
+            label={t("retries")}
+            value={`${flow.retryCount} / ${flow.maxRetryCount}`}
           />
           <InfoRow
-            label={t("cronExpression")}
-            value={flow.cronExpression ?? "—"}
+            label={t("active")}
+            value={flow.active ? tCore("active") : tCore("inactive")}
           />
           <InfoRow
-            label={t("enabled")}
-            value={flow.enabled ? tCore("active") : tCore("inactive")}
+            label={t("lastIngestedAt")}
+            value={
+              flow.lastIngestedAt === null
+                ? "—"
+                : formatDate(flow.lastIngestedAt)
+            }
           />
-          <InfoRow label={t("code")} value={flow.code} />
         </dl>
       )}
     </WidgetState>
   );
 }
 
-function RunStatMetric({
-  hint,
-  unit,
-  value,
-}: {
-  hint: string;
-  unit?: string;
-  value: string;
-}) {
-  return (
-    <div className="flex flex-col gap-0.5 rounded-md border border-border/60 bg-muted/20 p-3">
-      <span className="text-xs text-muted-foreground">{hint}</span>
-      <span className="text-xl font-semibold text-foreground">
-        {value}
-        {unit !== undefined && (
-          <span className="ml-1 text-sm font-normal text-muted-foreground">
-            {unit}
-          </span>
-        )}
-      </span>
-    </div>
-  );
-}
-
-function RunStatsWidget({ flowId }: FlowWidgetProps) {
-  const t = useTranslations("page.flows.detail.stats");
-  const runsQuery = useFlowRuns({ flowId });
-  const runs = runsQuery.data ?? [];
-  const lastError = lastErrorMessage(runs);
-
-  return (
-    <WidgetState isLoading={runsQuery.isLoading}>
-      <div className="grid grid-cols-2 gap-2">
-        <RunStatMetric
-          hint={t("successRate")}
-          unit="%"
-          value={String(successRate(runs))}
-        />
-        <RunStatMetric
-          hint={t("avgDuration")}
-          unit="ms"
-          value={String(avgDurationMs(runs))}
-        />
-        <RunStatMetric
-          hint={t("p95Duration")}
-          unit="ms"
-          value={String(p95DurationMs(runs))}
-        />
-        <RunStatMetric
-          hint={t("totalRuns", { count: runs.length })}
-          value={String(runs.length)}
-        />
-      </div>
-      {lastError !== null && (
-        <p className="mt-3 text-xs text-destructive">
-          {truncate(lastError, ERROR_TRUNCATE)}
-        </p>
-      )}
-    </WidgetState>
-  );
-}
-
-function RunTimelineWidget({ flowId }: FlowWidgetProps) {
-  const runsQuery = useFlowRuns({ flowId });
-  const runs = runsQuery.data ?? [];
-
-  return (
-    <WidgetState isEmpty={runs.length === 0} isLoading={runsQuery.isLoading}>
-      <RunsTimeline runs={runs} />
-    </WidgetState>
-  );
-}
-
-function SubjectFlowWidget({ flowId }: FlowWidgetProps) {
+function ProductActivityWidget({
+  flowName,
+  isMaximized = false,
+}: FlowWidgetProps) {
   const tWidgets = useTranslations("widgets.flowDetail");
-  const flowQuery = useFlowDetail(flowId);
-  const subject = flowQuery.data ? getNatsSubject(flowQuery.data) : "";
+  const [chartType, setChartType] = useState<BucketChartType>("area");
   const [since] = useState(() => computeLast24hIso());
   const payloadsQuery = usePayloads({
-    enabled: subject !== "",
+    enabled: flowName !== "",
     query: {
       from: since,
       page: 0,
+      productName: flowName,
       size: FLOW_CHART_BUCKET_LIMIT,
-      subject,
+      subject: SERVICE_PAYLOAD_SUBJECT,
     },
   });
   const buckets = useMemo(
@@ -161,38 +97,46 @@ function SubjectFlowWidget({ flowId }: FlowWidgetProps) {
 
   return (
     <WidgetState
-      emptyTitle={subject === "" ? tWidgets("subjectFlowNoSubject") : undefined}
-      isEmpty={subject === "" || buckets.every((b) => b.count === 0)}
-      isLoading={
-        flowQuery.isLoading || (subject !== "" && payloadsQuery.isLoading)
-      }
+      emptyTitle={tWidgets("activityEmpty")}
+      isEmpty={buckets.every((b) => b.count === 0)}
+      isLoading={payloadsQuery.isLoading}
     >
-      <MessageFlowChart data={buckets} />
+      <div className="flex h-full flex-col gap-2">
+        {isMaximized && (
+          <div className="flex justify-end">
+            <ChartTypePicker
+              onChange={setChartType}
+              types={BUCKET_CHART_TYPES}
+              value={chartType}
+            />
+          </div>
+        )}
+        <div className="min-h-0 flex-1">
+          <BucketChart data={buckets} type={chartType} />
+        </div>
+      </div>
     </WidgetState>
   );
 }
 
-function RecentMessagesWidget({ flowId }: FlowWidgetProps) {
+function RecentMessagesWidget({ flowName }: FlowWidgetProps) {
   const tWidgets = useTranslations("widgets.flowDetail");
-  const flowQuery = useFlowDetail(flowId);
-  const subject = flowQuery.data ? getNatsSubject(flowQuery.data) : "";
   const payloadsQuery = usePayloads({
-    enabled: subject !== "",
-    query: { page: 0, size: RECENT_PAYLOADS_LIMIT, subject },
+    enabled: flowName !== "",
+    query: {
+      page: 0,
+      productName: flowName,
+      size: RECENT_PAYLOADS_LIMIT,
+      subject: SERVICE_PAYLOAD_SUBJECT,
+    },
   });
   const items = payloadsQuery.data?.content ?? [];
 
   return (
     <WidgetState
-      emptyTitle={
-        subject === ""
-          ? tWidgets("recentMessagesNoSubject")
-          : tWidgets("recentMessagesEmpty")
-      }
-      isEmpty={subject === "" || items.length === 0}
-      isLoading={
-        flowQuery.isLoading || (subject !== "" && payloadsQuery.isLoading)
-      }
+      emptyTitle={tWidgets("recentMessagesEmpty")}
+      isEmpty={items.length === 0}
+      isLoading={payloadsQuery.isLoading}
     >
       <ul className="flex flex-col gap-1.5 text-xs">
         {items.map((row) => (
@@ -216,45 +160,33 @@ function RecentMessagesWidget({ flowId }: FlowWidgetProps) {
   );
 }
 
-function renderWithFlowId(
+function renderWithFlowName(
   Component: (props: FlowWidgetProps) => ReactElement,
-  ctx: { flowId?: number },
+  ctx: { flowName?: string; isMaximized: boolean },
 ): ReactElement {
-  if (ctx.flowId === undefined) {
+  if (ctx.flowName === undefined) {
     return <Skeleton className="h-full w-full" />;
   }
-  return <Component flowId={ctx.flowId} />;
+  return <Component flowName={ctx.flowName} isMaximized={ctx.isMaximized} />;
 }
 
 export const FLOW_DETAIL_WIDGETS: WidgetRegistry = [
   {
-    defaultLayout: { h: 4, minH: 3, w: 6, x: 0, y: 0 },
+    defaultLayout: { h: 4, minH: 3, w: 12, x: 0, y: 0 },
     id: "flowDetail.info",
-    render: (ctx) => renderWithFlowId(InfoWidget, ctx),
+    render: (ctx) => renderWithFlowName(InfoWidget, ctx),
     titleKey: "flowDetail.info",
   },
   {
-    defaultLayout: { h: 4, minH: 3, w: 6, x: 6, y: 0 },
-    id: "flowDetail.runStats",
-    render: (ctx) => renderWithFlowId(RunStatsWidget, ctx),
-    titleKey: "flowDetail.runStats",
-  },
-  {
     defaultLayout: { h: 5, minH: 4, minW: 6, w: 8, x: 0, y: 4 },
-    id: "flowDetail.subjectFlow",
-    render: (ctx) => renderWithFlowId(SubjectFlowWidget, ctx),
-    titleKey: "flowDetail.subjectFlow",
+    id: "flowDetail.productActivity",
+    render: (ctx) => renderWithFlowName(ProductActivityWidget, ctx),
+    titleKey: "flowDetail.productActivity",
   },
   {
     defaultLayout: { h: 5, minH: 3, minW: 4, w: 4, x: 8, y: 4 },
     id: "flowDetail.recentMessages",
-    render: (ctx) => renderWithFlowId(RecentMessagesWidget, ctx),
+    render: (ctx) => renderWithFlowName(RecentMessagesWidget, ctx),
     titleKey: "flowDetail.recentMessages",
-  },
-  {
-    defaultLayout: { h: 5, minH: 3, minW: 6, w: 12, x: 0, y: 9 },
-    id: "flowDetail.runTimeline",
-    render: (ctx) => renderWithFlowId(RunTimelineWidget, ctx),
-    titleKey: "flowDetail.runTimeline",
   },
 ];

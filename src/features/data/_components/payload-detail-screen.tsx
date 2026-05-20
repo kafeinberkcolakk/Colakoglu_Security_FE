@@ -29,9 +29,55 @@ interface PayloadDetailScreenProps {
 
 function computePayloadSize(detail: PayloadDetail): number {
   if (detail.payload !== undefined) {
-    return new Blob([JSON.stringify(detail.payload)]).size;
+    const text =
+      typeof detail.payload === "string"
+        ? detail.payload
+        : JSON.stringify(detail.payload);
+    return new Blob([text]).size;
   }
   return detail.rawSize;
+}
+
+function isJsonPayload(
+  payload: PayloadDetail["payload"],
+): payload is Record<string, unknown> | unknown[] {
+  return (
+    payload !== undefined && typeof payload === "object" && payload !== null
+  );
+}
+
+function tryParseJson(raw: string): unknown {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+}
+
+// BPMN envelope: { productName, response: { statusCode, headers, body, endpoint, method } }
+// `response.body` arrives as a STRING (the target API's JSON response) and must be parsed for display.
+function extractResponse(
+  payload: PayloadDetail["payload"],
+): Record<string, unknown> | unknown[] | undefined {
+  if (
+    payload === undefined ||
+    typeof payload === "string" ||
+    typeof payload !== "object" ||
+    payload === null ||
+    Array.isArray(payload) ||
+    !("response" in payload)
+  ) {
+    return undefined;
+  }
+  const value = (payload as Record<string, unknown>).response;
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+  const responseObj = { ...(value as Record<string, unknown>) };
+  if (typeof responseObj.body === "string") {
+    responseObj.body = tryParseJson(responseObj.body);
+  }
+  return responseObj;
 }
 
 export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
@@ -44,14 +90,21 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
     [data],
   );
 
+  const responseBody = useMemo<Record<string, unknown> | unknown[] | undefined>(
+    () => (data ? extractResponse(data.payload) : undefined),
+    [data],
+  );
+
   const handleCopy = async () => {
-    if (!data?.payload) {
+    if (data?.payload === undefined) {
       return;
     }
+    const text =
+      typeof data.payload === "string"
+        ? data.payload
+        : JSON.stringify(data.payload, null, 2);
     try {
-      await navigator.clipboard.writeText(
-        JSON.stringify(data.payload, null, 2),
-      );
+      await navigator.clipboard.writeText(text);
       toast.success(t("copy.success"));
     } catch {
       toast.error(t("copy.error"));
@@ -64,11 +117,17 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
         {data && (
           <>
             <Button asChild={true} size="sm" variant="outline">
-              <Link href={pageRoutes.subjectDetail(data.subject)}>
+              <Link
+                href={
+                  data.productName
+                    ? pageRoutes.dataProductDetail(data.productName)
+                    : pageRoutes.subjectDetail(data.subject)
+                }
+              >
                 {tCore("close")}
               </Link>
             </Button>
-            {data.payload && (
+            {data.payload !== undefined && (
               <Button onClick={handleCopy} size="sm" variant="outline">
                 <Copy className="size-4" />
                 {t("copy.label")}
@@ -93,6 +152,12 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
         ) : (
           <>
             <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {data.productName && (
+                <Field
+                  label={t("fields.productName")}
+                  value={data.productName}
+                />
+              )}
               <Field label={t("fields.id")} value={data.id} />
               <Field label={t("fields.messageId")} value={data.messageId} />
               <Field label={t("fields.subject")} value={data.subject} />
@@ -102,13 +167,24 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
               />
               <Field
                 label={t("fields.format")}
-                value={data.payload ? "JSON" : t("fields.formatRaw")}
+                value={
+                  isJsonPayload(data.payload) ? "JSON" : t("fields.formatRaw")
+                }
               />
               <Field
                 label={t("fields.size")}
                 value={formatBytes(payloadSize)}
               />
             </section>
+
+            {responseBody !== undefined && (
+              <section className="flex flex-col gap-3">
+                <h2 className="text-base font-semibold text-foreground">
+                  {t("response.title")}
+                </h2>
+                <JsonTreeView data={responseBody} />
+              </section>
+            )}
 
             <section className="flex flex-col gap-3">
               <h2 className="text-base font-semibold text-foreground">
@@ -131,7 +207,7 @@ export function PayloadDetailScreen({ payloadId }: PayloadDetailScreenProps) {
 interface PayloadBodyProps {
   emptyLabel: string;
   largeLabel: string;
-  payload?: Record<string, unknown> | unknown[];
+  payload?: PayloadDetail["payload"];
   size: number;
 }
 
@@ -141,21 +217,21 @@ function PayloadBody({
   payload,
   size,
 }: PayloadBodyProps) {
-  if (payload) {
-    if (size > LARGE_PAYLOAD_THRESHOLD_BYTES) {
-      return (
-        <p className="text-sm text-muted-foreground">
-          {largeLabel.replace("{size}", formatBytes(size))}
-        </p>
-      );
-    }
-    return <JsonTreeView data={payload} />;
-  }
-  if (size > 0) {
+  if (size > LARGE_PAYLOAD_THRESHOLD_BYTES) {
     return (
       <p className="text-sm text-muted-foreground">
         {largeLabel.replace("{size}", formatBytes(size))}
       </p>
+    );
+  }
+  if (isJsonPayload(payload)) {
+    return <JsonTreeView data={payload} />;
+  }
+  if (typeof payload === "string" && payload.length > 0) {
+    return (
+      <pre className="overflow-x-auto rounded bg-muted/30 p-3 font-mono text-xs text-foreground">
+        {payload}
+      </pre>
     );
   }
   return <p className="text-sm text-muted-foreground">{emptyLabel}</p>;

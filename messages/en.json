@@ -56,26 +56,24 @@
       "title": "Authentication error"
     },
     "dashboard": {
-      "activeFlows": "Other data flows",
       "cards": {
-        "dlq": "Dead-letter entries",
-        "dlqAttention": "Needs attention",
-        "dlqHealthy": "Healthy",
+        "activeFlows": "Active flows",
+        "activeFlowsSubtitle": "{total} branches total",
         "last24h": "Last 24h",
         "last24hSubtitle": "Messages received",
         "total": "Total messages",
-        "totalSubtitle": "Across all subjects"
+        "totalSubtitle": "Across all products"
       },
       "flow": {
         "subtitle": "Last 24 hours, hourly buckets",
         "title": "Message flow"
       },
       "live": "● LIVE",
-      "subjectFlows": {
-        "empty": "No subject activity in the last 24 hours.",
+      "productFlows": {
+        "empty": "No product activity in the last 24 hours.",
         "messageCount": "{count} messages",
         "subtitle": "Live, last 24h",
-        "title": "Live data flows"
+        "title": "Live products"
       },
       "title": "Dashboard"
     },
@@ -104,6 +102,7 @@
         "table": {
           "isJson": "Format",
           "payloadSize": "Size",
+          "productName": "Product",
           "receivedAt": "Received at"
         }
       },
@@ -119,6 +118,7 @@
           "formatRaw": "Raw bytes",
           "id": "ID",
           "messageId": "Message ID",
+          "productName": "Product name",
           "receivedAt": "Received at",
           "size": "Size",
           "subject": "Subject"
@@ -126,9 +126,29 @@
         "payload": {
           "empty": "No payload available.",
           "large": "This message is large ({size}). Download raw to inspect.",
-          "title": "Payload"
+          "title": "Full payload"
+        },
+        "response": {
+          "title": "Response (payload body)"
         },
         "title": "Message detail"
+      },
+      "products": {
+        "detail": {
+          "copyWebhook": "Copy webhook URL",
+          "webhookCopied": "Webhook URL copied.",
+          "webhookCopyFailed": "Could not copy URL."
+        },
+        "filter": {
+          "productName": "Product"
+        },
+        "subtitle": "Each product is a logical data source feeding service.payload.",
+        "table": {
+          "lastReceivedAt": "Last received",
+          "messageCount": "Messages",
+          "productName": "Product"
+        },
+        "title": "Data sources"
       },
       "subjects": {
         "filter": {
@@ -139,176 +159,63 @@
           "messageCount": "Messages",
           "subject": "Subject"
         },
-        "title": "Data flows"
+        "title": "Subjects"
       }
     },
-    "dlq": {
-      "delete": {
-        "confirm": "This DLQ entry will be permanently deleted.",
-        "title": "Delete DLQ entry?"
+    "flowgro": {
+      "allProcessReport": {
+        "title": "All Process Report"
       },
-      "detail": {
-        "consumer": "Consumer",
-        "errorMessage": "Error message",
-        "occurredAt": "Occurred at",
-        "originalSubject": "Original subject",
-        "payloadBytes": "Payload size",
-        "retriedAt": "Last retried at",
-        "retryCount": "Retry count",
-        "title": "DLQ entry detail"
+      "camundaUser": {
+        "title": "Camunda Users"
       },
-      "filter": {
-        "consumer": "Consumer",
-        "errorMessage": "Error message",
-        "originalSubject": "Original subject"
+      "deployment": {
+        "title": "Deployment"
       },
-      "table": {
-        "consumer": "Consumer",
-        "errorMessage": "Error message",
-        "occurredAt": "Occurred at",
-        "originalSubject": "Original subject",
-        "retryCount": "Retries"
+      "flowExecution": {
+        "title": "Flow Execution"
       },
-      "title": "Dead Letter Queue",
-      "toast": {
-        "deleteError": "Failed to delete DLQ entry.",
-        "deleteSuccess": "DLQ entry deleted.",
-        "retryError": "Failed to retry DLQ entry.",
-        "retrySuccess": "DLQ entry re-queued."
+      "loading": "Loading workflow module…",
+      "missingConfig": "Workflow UI is not configured (FLOWGRO_UI_URL).",
+      "modeller": {
+        "title": "BPMN Designer"
+      },
+      "myTasks": {
+        "title": "My Tasks"
+      },
+      "processCockpit": {
+        "title": "Process Cockpit"
+      },
+      "userReport": {
+        "title": "User Report"
       }
     },
     "flows": {
-      "delete": {
-        "confirm": "Flow \"{name}\" will be permanently deleted along with its run history.",
-        "title": "Delete Flow?"
-      },
       "detail": {
         "info": {
-          "code": "Webhook code",
-          "cronExpression": "Cron expression",
-          "enabled": "Status",
-          "natsSubject": "NATS subject"
-        },
-        "run": "Run now",
-        "runs": {
-          "title": "Run history"
-        },
-        "stats": {
-          "avgDuration": "Avg duration",
-          "lastError": "Last error",
-          "messagesSubtitle": "Messages: {count}",
-          "noError": "No errors recorded.",
-          "p95Duration": "p95 duration",
-          "p95Subtitle": "Across recent runs",
-          "successRate": "Success rate",
-          "totalRuns": "{count} runs"
+          "active": "Status",
+          "currentStep": "Current step",
+          "endpoint": "Endpoint",
+          "intervalSeconds": "Interval",
+          "lastIngestedAt": "Last ingested at",
+          "name": "Branch",
+          "retries": "Retries"
         },
         "title": "Flow detail"
       },
       "filter": {
-        "name": "Name",
-        "natsSubject": "NATS subject",
-        "type": "Type"
-      },
-      "form": {
-        "config": {
-          "dbQuery": {
-            "fetchSize": "Fetch size",
-            "jdbcUrl": "JDBC URL",
-            "jdbcUrlPlaceholder": "jdbc:postgresql://host:5432/db",
-            "password": "Password",
-            "passwordPlaceholder": "Enter password",
-            "sql": "SQL",
-            "sqlPlaceholder": "SELECT id, name FROM ...",
-            "username": "Username",
-            "usernamePlaceholder": "Database user"
-          },
-          "fileSftp": {
-            "filePattern": "File pattern (regex)",
-            "filePatternPlaceholder": ".*\\.csv$",
-            "host": "Host",
-            "hostPlaceholder": "sftp.example.com",
-            "moveAfterDownload": "Move processed files",
-            "password": "Password",
-            "passwordPlaceholder": "Enter password",
-            "port": "Port",
-            "processedDir": "Processed dir",
-            "processedDirPlaceholder": "/inbox/processed",
-            "remoteDir": "Remote dir",
-            "remoteDirPlaceholder": "/inbox",
-            "username": "Username",
-            "usernamePlaceholder": "SFTP user"
-          },
-          "httpRest": {
-            "body": "Body",
-            "bodyPlaceholder": "Optional request body",
-            "headerKeyPlaceholder": "Header name",
-            "headers": "Headers",
-            "headerValuePlaceholder": "Header value",
-            "method": "HTTP method",
-            "url": "URL",
-            "urlPlaceholder": "https://api.example.com/data"
-          },
-          "title": "Configuration",
-          "webhook": {
-            "hint": "Webhook flows are pushed by external systems. No config required."
-          }
-        },
-        "cronExpression": "Cron expression",
-        "cronHint": "Spring 6-field cron format. Leave empty for on-demand only.",
-        "cronPlaceholder": "0 */5 * * * *",
-        "description": "Description",
-        "descriptionPlaceholder": "Optional notes about this flow",
-        "enabled": "Enabled",
-        "name": "Name",
-        "namePlaceholder": "sentinelone-scheduled",
-        "natsSubject": "NATS subject",
-        "natsSubjectPlaceholder": "edr.sentinelone.scheduled",
-        "secret": {
-          "changeToggle": "Change secret",
-          "hint": "Used by external systems to authenticate webhook calls. Leave empty to remove existing secret.",
-          "keepHint": "Existing secret will be preserved.",
-          "label": "Secret",
-          "placeholder": "Enter secret",
-          "title": "Secret"
-        },
-        "titleEdit": "Edit Flow",
-        "titleNew": "New Flow",
-        "type": "Type",
-        "typeLocked": "Type cannot be changed after creation."
+        "name": "Name"
       },
       "table": {
-        "cronExpression": "Cron expression",
-        "enabled": "Status",
+        "active": "Status",
+        "currentStep": "Current step",
+        "endpoint": "Endpoint",
+        "intervalSeconds": "Interval",
+        "lastIngestedAt": "Last ingested at",
         "name": "Name",
-        "natsSubject": "NATS subject",
-        "type": "Type"
+        "retries": "Retries"
       },
-      "title": "Flows",
-      "toast": {
-        "createError": "Failed to create flow.",
-        "createSuccess": "Flow created.",
-        "deleteError": "Failed to delete flow.",
-        "deleteSuccess": "Flow deleted.",
-        "runError": "Failed to trigger flow.",
-        "runSuccess": "Flow triggered.",
-        "updateError": "Failed to update flow.",
-        "updateSuccess": "Flow updated."
-      },
-      "toolbar": {
-        "new": "Add Flow"
-      },
-      "triggerTypes": {
-        "MANUAL": "Manual",
-        "SCHEDULE": "Schedule",
-        "WEBHOOK": "Webhook"
-      },
-      "types": {
-        "db_query_collector": "Database Query",
-        "file_sftp_collector": "SFTP File",
-        "http_rest_collector": "HTTP REST",
-        "webhook_collector": "Webhook"
-      }
+      "title": "Flows"
     },
     "profile": {
       "form": {
@@ -331,99 +238,6 @@
         "updateError": "Failed to update profile.",
         "updateSuccess": "Profile updated successfully."
       }
-    },
-    "reports": {
-      "flowPerformance": {
-        "empty": "No flows yet.",
-        "stats": {
-          "avgDuration": "Avg duration",
-          "lastError": "Last error",
-          "noError": "—",
-          "p95Duration": "p95",
-          "successRate": "Success",
-          "totalRuns": "Runs"
-        },
-        "subtitle": "Per-flow run performance over the selected window.",
-        "table": {
-          "avgMs": "Avg (ms)",
-          "lastError": "Last error",
-          "lastRun": "Last run",
-          "name": "Flow",
-          "p95Ms": "p95 (ms)",
-          "successRate": "Success rate",
-          "totalRuns": "Runs",
-          "type": "Type"
-        },
-        "title": "Flow Performance"
-      },
-      "subjects": {
-        "activity": {
-          "title": "Hourly activity"
-        },
-        "empty": "Pick a subject to inspect activity.",
-        "noSubjects": "No subjects yet.",
-        "selector": {
-          "label": "Subject",
-          "placeholder": "Choose a subject"
-        },
-        "stats": {
-          "last": "Last received",
-          "total": "Messages"
-        },
-        "subtitle": "Per-subject volume and timing.",
-        "title": "Subject Reports"
-      },
-      "system": {
-        "cards": {
-          "activeFlows": "Active flows",
-          "activeFlowsSubtitle": "Currently enabled",
-          "dlq": "DLQ entries",
-          "dlqHealthy": "Healthy",
-          "dlqNeedsAttention": "Needs attention",
-          "last24h": "Last 24h",
-          "last24hSubtitle": "Messages received",
-          "subjects": "Subjects",
-          "subjectsSubtitle": "Distinct channels",
-          "total": "Total messages",
-          "totalSubtitle": "All-time count"
-        },
-        "dlqTrend": {
-          "subtitle": "Recent DLQ activity by hour",
-          "title": "DLQ trend"
-        },
-        "flow": {
-          "subtitle": "Last 24 hours, hourly buckets",
-          "title": "Message flow"
-        },
-        "subtitle": "Aggregate health and throughput across all subjects.",
-        "title": "System Reports"
-      },
-      "threats": {
-        "cards": {
-          "active": "Active threats",
-          "activeSubtitle": "Endpoints with active threats",
-          "firewallOff": "Firewall off",
-          "firewallOffSubtitle": "Endpoints with firewall disabled",
-          "outdatedAgent": "Outdated agents",
-          "outdatedAgentSubtitle": "Below latest version",
-          "total": "Endpoints scanned",
-          "totalSubtitle": "Most recent SentinelOne payload",
-          "vulnerable": "Vulnerable",
-          "vulnerableSubtitle": "Pending patches"
-        },
-        "empty": "No SentinelOne payload available yet.",
-        "subject": "Source subject: {subject}",
-        "subtitle": "Endpoint security posture from the latest SentinelOne payload.",
-        "table": {
-          "agentVersion": "Agent",
-          "computerName": "Endpoint",
-          "lastActiveDate": "Last active",
-          "osType": "OS",
-          "status": "Status",
-          "title": "At-risk endpoints"
-        },
-        "title": "Threat Telemetry"
-      }
     }
   },
   "relative": {
@@ -434,20 +248,22 @@
   },
   "sidebar": {
     "group": {
-      "admin": "Administration",
       "monitoring": "Monitoring",
-      "reporting": "Reporting"
+      "workflow": "Workflow"
     },
     "menu": {
       "dashboard": "Dashboard",
-      "data": "Data Flows",
-      "dlq": "Dead Letter Queue",
+      "data": "Data Sources",
+      "flowgroAllProcessReport": "All Process Report",
+      "flowgroCamundaUser": "Camunda Users",
+      "flowgroDeployment": "Deployment",
+      "flowgroFlowExecution": "Flow Execution",
+      "flowgroModeller": "BPMN Designer",
+      "flowgroMyTasks": "My Tasks",
+      "flowgroProcessCockpit": "Process Cockpit",
+      "flowgroUserReport": "User Report",
       "flows": "Flows",
-      "profile": "Profile",
-      "reportsFlowPerformance": "Flow Performance",
-      "reportsSubjects": "Subject Reports",
-      "reportsSystem": "System Reports",
-      "reportsThreats": "Threat Telemetry"
+      "profile": "Profile"
     }
   },
   "theme": {
@@ -457,10 +273,8 @@
   "validation": {
     "noValidEmail": "Invalid e-mail address.",
     "passwordMismatch": "Passwords do not match.",
-    "positiveInt": "Must be a positive integer.",
     "required": "This field is required.",
-    "tooLong": "Value is too long.",
-    "urlInvalid": "Enter a valid URL."
+    "tooLong": "Value is too long."
   },
   "widgets": {
     "actions": {
@@ -471,37 +285,25 @@
       "remove": "Remove",
       "reset": "Reset"
     },
+    "chartTypes": {
+      "area": "Area",
+      "bar": "Bar",
+      "legend": "Chart type"
+    },
     "dashboard": {
-      "dlq": "DLQ entries",
+      "activeFlows": "Active flows",
       "last24h": "Last 24h",
       "messageFlow": "Message flow",
-      "subjectFlow": "Live subject flows",
-      "subjectsTable": "Subjects",
+      "productFlow": "Live products",
+      "productsTable": "Other products",
       "totalMessages": "Total messages"
     },
     "flowDetail": {
-      "info": "Flow info",
+      "activityEmpty": "No activity in the last 24 hours.",
+      "info": "Branch info",
+      "productActivity": "Activity (last 24h)",
       "recentMessages": "Recent messages",
-      "recentMessagesEmpty": "No recent messages.",
-      "recentMessagesNoSubject": "Flow has no NATS subject.",
-      "runStats": "Run stats",
-      "runTimeline": "Run timeline",
-      "subjectFlow": "Subject activity (last 24h)",
-      "subjectFlowNoSubject": "Flow has no NATS subject."
-    },
-    "flowPerf": {
-      "noFlows": "No flows yet.",
-      "table": "Flows",
-      "topErrors": "Top errors"
-    },
-    "system": {
-      "activeFlows": "Active flows",
-      "dlq": "DLQ",
-      "dlqTrend": "DLQ trend",
-      "last24h": "Last 24h",
-      "messageFlow": "Message flow",
-      "subjects": "Subjects",
-      "total": "Total messages"
+      "recentMessagesEmpty": "No recent messages."
     }
   }
 }

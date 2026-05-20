@@ -46,6 +46,19 @@ export function LiveFeedTable({
       sortable: true,
     },
     {
+      header: t("productName"),
+      key: "productName",
+      render: (row) =>
+        row.productName ? (
+          <span className="rounded-full border border-border bg-muted px-2 py-0.5 font-mono text-xs">
+            {row.productName}
+          </span>
+        ) : (
+          "—"
+        ),
+      sortable: true,
+    },
+    {
       align: "right",
       header: t("payloadSize"),
       key: "payloadSize",

@@ -1,14 +1,13 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { flowsApi } from "@/features/flows/api/flows-api";
-import type { FlowListQuery } from "@/features/flows/types/flow";
 
-export const flowsListKey = (query: FlowListQuery) =>
-  ["flows", "list", query] as const;
+export const FLOWS_REFETCH_INTERVAL_MS = 7000;
+export const FLOWS_LIST_KEY = ["flows", "list"] as const;
 
-export function useFlowsList(query: FlowListQuery = {}) {
+export function useFlowsList() {
   return useQuery({
-    placeholderData: keepPreviousData,
-    queryFn: () => flowsApi.list(query),
-    queryKey: flowsListKey(query),
+    queryFn: () => flowsApi.list(),
+    queryKey: FLOWS_LIST_KEY,
+    refetchInterval: FLOWS_REFETCH_INTERVAL_MS,
   });
 }

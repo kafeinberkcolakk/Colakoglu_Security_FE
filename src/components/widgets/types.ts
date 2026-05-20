@@ -11,7 +11,7 @@ export interface WidgetLayout {
 }
 
 export interface WidgetContext {
-  flowId?: number;
+  flowName?: string;
   isMaximized: boolean;
 }
 

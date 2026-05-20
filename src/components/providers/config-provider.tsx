@@ -13,6 +13,8 @@ type ConfigData = {
   appName: string;
   appVersion: string;
   authEnabled?: boolean;
+  flowgroBaseUrl: string;
+  flowgroUiUrl: string;
 };
 
 type ConfigContextType = {

@@ -12,6 +12,8 @@ export const KEYCLOAK_CLIENT_ID = process.env.KEYCLOAK_CLIENT_ID;
 export const KEYCLOAK_AUDIENCE = process.env.KEYCLOAK_AUDIENCE;
 export const KEYCLOAK_SCOPE = process.env.KEYCLOAK_SCOPE ?? "openid";
 export const USE_SECURE_COOKIE = process.env.USE_SECURE_COOKIE === "true";
+export const FLOWGRO_UI_URL =
+  process.env.FLOWGRO_UI_URL ?? "http://localhost:3001";
 
 export const isAuthEnabled = Boolean(KEYCLOAK_URL && KEYCLOAK_CLIENT_ID);
 

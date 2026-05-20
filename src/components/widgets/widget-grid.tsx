@@ -30,12 +30,12 @@ const ResponsiveGridLayout = dynamic(
 );
 
 interface WidgetGridProps {
-  flowId?: number;
+  flowName?: string;
   registry: WidgetRegistry;
   screenId: string;
 }
 
-export function WidgetGrid({ flowId, registry, screenId }: WidgetGridProps) {
+export function WidgetGrid({ flowName, registry, screenId }: WidgetGridProps) {
   const tWidgets = useTranslations("widgets");
   const layoutCtl = useWidgetLayout(screenId, registry);
   const [maximized, setMaximized] = useState<WidgetDefinition | null>(null);
@@ -98,7 +98,7 @@ export function WidgetGrid({ flowId, registry, screenId }: WidgetGridProps) {
               onRemove={() => layoutCtl.hideWidget(def.id)}
               title={tWidgets(def.titleKey)}
             >
-              {def.render({ flowId, isMaximized: false })}
+              {def.render({ flowName, isMaximized: false })}
             </WidgetFrame>
           </div>
         ))}
@@ -113,7 +113,7 @@ export function WidgetGrid({ flowId, registry, screenId }: WidgetGridProps) {
         open={maximized !== null}
         title={maximized ? tWidgets(maximized.titleKey) : ""}
       >
-        {maximized?.render({ flowId, isMaximized: true })}
+        {maximized?.render({ flowName, isMaximized: true })}
       </WidgetMaximizeDialog>
     </div>
   );

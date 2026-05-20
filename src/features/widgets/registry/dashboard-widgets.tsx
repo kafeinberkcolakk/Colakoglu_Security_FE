@@ -1,17 +1,24 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import {
+  BUCKET_CHART_TYPES,
+  BucketChart,
+  type BucketChartType,
+} from "@/components/charts/bucket-chart";
+import { ChartTypePicker } from "@/components/charts/chart-type-picker";
 import {
   MetricValue,
   type WidgetRegistry,
   WidgetState,
 } from "@/components/widgets";
 import { useDashboardAggregates } from "@/features/dashboard/hooks/use-dashboard-aggregates";
-import { MessageFlowChart } from "@/features/data/_components/message-flow-chart";
-import { SubjectFlowGrid } from "@/features/data/_components/subject-flow-grid";
-import { SubjectsTable } from "@/features/data/_components/subjects-table";
+import { ProductFlowGrid } from "@/features/data/_components/product-flow-grid";
+import { ProductsTable } from "@/features/data/_components/products-table";
 import { bucketByHour } from "@/features/data/domain/bucket-aggregation";
+import { aggregateProducts } from "@/features/data/domain/product-aggregation";
+import { useFlowsList } from "@/features/flows/hooks/use-flows-list";
 
 const TABLE_OVERFLOW_THRESHOLD = 6;
 
@@ -41,57 +48,80 @@ function Last24hWidget() {
   );
 }
 
-function DlqWidget() {
+function ActiveFlowsWidget() {
   const t = useTranslations("page.dashboard.cards");
-  const { data, isLoading } = useDashboardAggregates();
-  const count = data?.dlqCount ?? 0;
+  const flowsQuery = useFlowsList();
+  const items = useMemo(
+    () => flowsQuery.data?.items ?? [],
+    [flowsQuery.data?.items],
+  );
+  const activeCount = useMemo(
+    () => items.filter((flow) => flow.active).length,
+    [items],
+  );
   return (
-    <WidgetState isLoading={isLoading}>
+    <WidgetState isLoading={flowsQuery.isLoading}>
       <MetricValue
-        hint={count === 0 ? t("dlqHealthy") : t("dlqAttention")}
-        value={count}
+        hint={t("activeFlowsSubtitle", { total: items.length })}
+        value={activeCount}
       />
     </WidgetState>
   );
 }
 
-function MessageFlowWidget() {
+function MessageFlowWidget({ isMaximized }: { isMaximized: boolean }) {
   const { data, isLoading } = useDashboardAggregates();
+  const [chartType, setChartType] = useState<BucketChartType>("area");
   const buckets = useMemo(
     () => bucketByHour(data?.payloadsLast24h ?? []),
     [data?.payloadsLast24h],
   );
   return (
     <WidgetState isEmpty={buckets.length === 0} isLoading={isLoading}>
-      <MessageFlowChart data={buckets} />
+      <div className="flex h-full flex-col gap-2">
+        {isMaximized && (
+          <div className="flex justify-end">
+            <ChartTypePicker
+              onChange={setChartType}
+              types={BUCKET_CHART_TYPES}
+              value={chartType}
+            />
+          </div>
+        )}
+        <div className="min-h-0 flex-1">
+          <BucketChart data={buckets} type={chartType} />
+        </div>
+      </div>
     </WidgetState>
   );
 }
 
-function SubjectFlowWidget() {
+function ProductFlowWidget() {
   const { data, isLoading } = useDashboardAggregates();
+  const payloads = useMemo(
+    () => data?.payloadsLast24h ?? [],
+    [data?.payloadsLast24h],
+  );
+  const products = useMemo(() => aggregateProducts(payloads), [payloads]);
   return (
-    <WidgetState
-      isEmpty={(data?.subjects ?? []).length === 0}
-      isLoading={isLoading}
-    >
-      <SubjectFlowGrid
-        payloads={data?.payloadsLast24h ?? []}
-        subjects={data?.subjects ?? []}
-      />
+    <WidgetState isEmpty={products.length === 0} isLoading={isLoading}>
+      <ProductFlowGrid payloads={payloads} />
     </WidgetState>
   );
 }
 
-function SubjectsTableWidget() {
+function ProductsTableWidget() {
   const { data, isLoading } = useDashboardAggregates();
-  const overflowSubjects = useMemo(
-    () => (data?.subjects ?? []).slice(TABLE_OVERFLOW_THRESHOLD),
-    [data?.subjects],
+  const overflowProducts = useMemo(
+    () =>
+      aggregateProducts(data?.payloadsLast24h ?? []).slice(
+        TABLE_OVERFLOW_THRESHOLD,
+      ),
+    [data?.payloadsLast24h],
   );
   return (
-    <WidgetState isEmpty={overflowSubjects.length === 0} isLoading={isLoading}>
-      <SubjectsTable data={overflowSubjects} />
+    <WidgetState isEmpty={overflowProducts.length === 0} isLoading={isLoading}>
+      <ProductsTable data={overflowProducts} />
     </WidgetState>
   );
 }
@@ -111,26 +141,26 @@ export const DASHBOARD_WIDGETS: WidgetRegistry = [
   },
   {
     defaultLayout: { h: 2, w: 4, x: 8, y: 0 },
-    id: "dashboard.dlq",
-    render: () => <DlqWidget />,
-    titleKey: "dashboard.dlq",
+    id: "dashboard.activeFlows",
+    render: () => <ActiveFlowsWidget />,
+    titleKey: "dashboard.activeFlows",
   },
   {
     defaultLayout: { h: 6, minH: 4, minW: 6, w: 12, x: 0, y: 2 },
     id: "dashboard.messageFlow",
-    render: () => <MessageFlowWidget />,
+    render: (ctx) => <MessageFlowWidget isMaximized={ctx.isMaximized} />,
     titleKey: "dashboard.messageFlow",
   },
   {
     defaultLayout: { h: 5, minH: 3, minW: 6, w: 12, x: 0, y: 8 },
-    id: "dashboard.subjectFlow",
-    render: () => <SubjectFlowWidget />,
-    titleKey: "dashboard.subjectFlow",
+    id: "dashboard.productFlow",
+    render: () => <ProductFlowWidget />,
+    titleKey: "dashboard.productFlow",
   },
   {
     defaultLayout: { h: 5, minH: 3, minW: 6, w: 12, x: 0, y: 13 },
-    id: "dashboard.subjectsTable",
-    render: () => <SubjectsTableWidget />,
-    titleKey: "dashboard.subjectsTable",
+    id: "dashboard.productsTable",
+    render: () => <ProductsTableWidget />,
+    titleKey: "dashboard.productsTable",
   },
 ];

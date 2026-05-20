@@ -19,7 +19,9 @@ export interface PayloadSummary {
   id: string;
   jsonSize: number;
   messageId: string;
+  payload?: Record<string, unknown> | unknown[];
   payloadSize: number;
+  productName?: string;
   rawSize: number;
   receivedAt: string;
   subject: string;
@@ -29,7 +31,8 @@ export interface PayloadDetail {
   hasRaw: boolean;
   id: string;
   messageId: string;
-  payload?: Record<string, unknown> | unknown[];
+  payload?: Record<string, unknown> | unknown[] | string;
+  productName?: string;
   rawSize: number;
   receivedAt: string;
   subject: string;
@@ -46,8 +49,16 @@ export interface PayloadPage {
 export interface PayloadListQuery {
   from?: string;
   page?: number;
+  productName?: string;
   size?: number;
   subject?: string;
+}
+
+// Logical-source-aggregated view (derived client-side from service.payload stream).
+export interface ProductStats {
+  lastReceivedAt: string;
+  messageCount: number;
+  productName: string;
 }
 
 // ---- Wire shapes (REPORTING_API_FE.md) ----
@@ -70,16 +81,22 @@ export interface WirePayloadSummary {
   id: string;
   jsonSize: number;
   messageId: string;
+  payload?: Record<string, unknown> | unknown[];
+  productName?: string | null;
   rawSize: number;
   receivedAt: string;
   subject: string;
 }
 
+// New BE detail returns `payload` that may be either:
+//   - JSON object (BPMN envelope: { productName, response: { ..., body: string } })
+//   - raw string when parse failed
 export interface WirePayloadDetail {
   hasRaw: boolean;
   id: string;
   messageId: string;
-  payload?: Record<string, unknown> | unknown[];
+  payload?: Record<string, unknown> | unknown[] | string;
+  productName?: string | null;
   rawSize: number;
   receivedAt: string;
   subject: string;

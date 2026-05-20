@@ -18,7 +18,7 @@ const sourceSans = Source_Sans_3({
 
 export const metadata: Metadata = {
   description: "Partner Kafein WebUI",
-  title: "Kafein Partner",
+  title: "Colakoglu Security",
 };
 
 export default async function RootLayout({
@@ -31,7 +31,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning={true}>
-      <body className={`${sourceSans.variable} antialiased`}>
+      <body
+        className={`${sourceSans.variable} antialiased h-svh overflow-hidden`}
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider
             attribute="class"
@@ -41,9 +43,9 @@ export default async function RootLayout({
           >
             <QueryProvider>
               <ConfigProvider>
-                <SidebarProvider>
+                <SidebarProvider className="h-svh">
                   <AppSidebar />
-                  <SidebarInset>
+                  <SidebarInset className="min-h-0 overflow-hidden">
                     <AppHeader />
                     <main className="bg-background flex min-h-0 flex-1 flex-col overflow-auto">
                       {children}

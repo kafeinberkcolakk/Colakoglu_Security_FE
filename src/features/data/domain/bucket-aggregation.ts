@@ -103,6 +103,41 @@ export function bucketByHourBySubject(
   return result;
 }
 
+export function bucketByHourByProduct(
+  payloads: PayloadSummary[],
+  hours = HOURS_PER_DAY,
+): Map<string, BucketPoint[]> {
+  const now = new Date();
+  const startMs = now.getTime() - hours * MS_PER_HOUR;
+  const perProduct = new Map<string, Map<string, number>>();
+
+  for (const payload of payloads) {
+    const productName = payload.productName;
+    if (productName === undefined || productName === "") {
+      continue;
+    }
+    const time = Date.parse(payload.receivedAt);
+    if (!Number.isFinite(time) || time < startMs) {
+      continue;
+    }
+    let buckets = perProduct.get(productName);
+    if (!buckets) {
+      buckets = emptyBuckets(hours, now);
+      perProduct.set(productName, buckets);
+    }
+    const key = startOfHourIso(new Date(time));
+    if (buckets.has(key)) {
+      buckets.set(key, (buckets.get(key) ?? 0) + 1);
+    }
+  }
+
+  const result = new Map<string, BucketPoint[]>();
+  for (const [productName, buckets] of perProduct.entries()) {
+    result.set(productName, bucketsToPoints(buckets));
+  }
+  return result;
+}
+
 export function subjectFreshness(lastReceivedAt: string): SubjectFreshness {
   const lastTime = Date.parse(lastReceivedAt);
   if (!Number.isFinite(lastTime)) {
