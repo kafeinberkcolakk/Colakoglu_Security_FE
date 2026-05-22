@@ -29,7 +29,7 @@ export function WidgetCard({
   return (
     <div
       className={cn(
-        "flex h-full flex-col rounded-lg border border-border bg-card p-4",
+        "flex h-full flex-col rounded-lg border border-border bg-card p-4 shadow-card transition-shadow duration-200 hover:shadow-card-hover",
         className,
       )}
     >

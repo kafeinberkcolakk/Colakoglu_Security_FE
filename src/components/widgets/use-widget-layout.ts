@@ -60,6 +60,20 @@ function writeStored(screenId: string, layout: WidgetLayout[]): void {
   }
 }
 
+function writeHidden(screenId: string, hiddenIds: ReadonlySet<string>): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+  try {
+    window.localStorage.setItem(
+      storageKey(`${screenId}:hidden`),
+      JSON.stringify(Array.from(hiddenIds).map((value) => ({ i: value }))),
+    );
+  } catch {
+    // ignore
+  }
+}
+
 export interface UseWidgetLayoutResult {
   editing: boolean;
   hiddenIds: ReadonlySet<string>;
@@ -68,6 +82,7 @@ export interface UseWidgetLayoutResult {
   reset: () => void;
   setEditing: (next: boolean) => void;
   setLayout: (next: WidgetLayout[]) => void;
+  showWidget: (id: string) => void;
   visibleDefinitions: WidgetDefinition[];
 }
 
@@ -134,16 +149,22 @@ export function useWidgetLayout(
       setHiddenIds((prev) => {
         const next = new Set(prev);
         next.add(id);
-        if (typeof window !== "undefined") {
-          try {
-            window.localStorage.setItem(
-              storageKey(`${screenId}:hidden`),
-              JSON.stringify(Array.from(next).map((value) => ({ i: value }))),
-            );
-          } catch {
-            // ignore
-          }
+        writeHidden(screenId, next);
+        return next;
+      });
+    },
+    [screenId],
+  );
+
+  const showWidget = useCallback(
+    (id: string) => {
+      setHiddenIds((prev) => {
+        if (!prev.has(id)) {
+          return prev;
         }
+        const next = new Set(prev);
+        next.delete(id);
+        writeHidden(screenId, next);
         return next;
       });
     },
@@ -163,6 +184,7 @@ export function useWidgetLayout(
     reset,
     setEditing,
     setLayout,
+    showWidget,
     visibleDefinitions,
   };
 }

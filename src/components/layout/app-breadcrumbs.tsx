@@ -21,6 +21,7 @@ type BreadcrumbEntry = {
 
 const routeDefinitions = [
   { key: "dashboard", path: pageRoutes.home },
+  { key: "ingest", path: pageRoutes.ingest },
   { key: "data", path: pageRoutes.data },
   { key: "flows", path: pageRoutes.flows },
   { key: "profile", path: pageRoutes.profile },

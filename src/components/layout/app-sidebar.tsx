@@ -10,6 +10,7 @@ import {
   PackagePlus,
   PencilRuler,
   PlayCircle,
+  ShieldAlert,
   UserCog,
   UserSearch,
   Workflow,
@@ -46,7 +47,8 @@ const NAV_GROUPS: NavGroup[] = [
   {
     groupKey: "monitoring",
     items: [
-      { href: pageRoutes.home, icon: LayoutDashboard, labelKey: "dashboard" },
+      { href: pageRoutes.home, icon: ShieldAlert, labelKey: "dashboard" },
+      { href: pageRoutes.ingest, icon: LayoutDashboard, labelKey: "ingest" },
       { href: pageRoutes.dataProducts, icon: Activity, labelKey: "data" },
       { href: pageRoutes.flows, icon: Workflow, labelKey: "flows" },
     ],
@@ -134,10 +136,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader
-        className="h-12 flex-row items-center gap-0 border-b-0 px-2 py-0"
-        style={{ background: "#0d1b3e" }}
-      >
+      <SidebarHeader className="h-12 flex-row items-center gap-0 border-b-0 bg-brand px-2 py-0">
         <SidebarHeaderContent />
       </SidebarHeader>
 

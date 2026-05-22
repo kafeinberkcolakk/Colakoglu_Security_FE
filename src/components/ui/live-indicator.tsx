@@ -32,11 +32,14 @@ export function LiveIndicator({
   return (
     <span
       className={cn(
-        "flex items-center gap-1.5 text-xs text-emerald-500",
+        "flex items-center gap-1.5 text-xs font-medium text-emerald-500",
         className,
       )}
     >
-      <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
+      <span className="relative flex size-2">
+        <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/60" />
+        <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+      </span>
       {label}
     </span>
   );

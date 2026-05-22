@@ -238,6 +238,136 @@
         "updateError": "Profil güncellenemedi.",
         "updateSuccess": "Profil başarıyla güncellendi."
       }
+    },
+    "securityDashboard": {
+      "editLayout": "Düzeni düzenle",
+      "editLayoutDone": "Düzenlemeyi bitir",
+      "global": {
+        "activeThreats": "Aktif tehdit",
+        "activeThreatsSubtitle": "Benzersiz saldırgan IP",
+        "critical": "Kritik offense",
+        "criticalSubtitle": "Magnitude 8 ve üzeri",
+        "healthyCollectors": "Sağlıklı collector",
+        "healthyCollectorsSubtitle": "Normal çalışan collector'lar",
+        "openOffenses": "Açık offense",
+        "openOffensesSubtitle": "Durum OPEN",
+        "title": "Genel Durum"
+      },
+      "health": {
+        "healthy": "Sağlıklı",
+        "stopped": "Durdu",
+        "unknown": "Bilinmiyor",
+        "warning": "Sorunlu"
+      },
+      "live": "● CANLI",
+      "refresh": "Yenile",
+      "section": {
+        "errorDescription": "QRadar verisi alınamadı (HTTP {code}).",
+        "errorTitle": "Veri yüklenemedi",
+        "everySeconds": "her {seconds}sn güncellenir",
+        "noDataTitle": "Bu collector henüz veri üretmedi",
+        "noTrend": "Trend için henüz yeterli geçmiş yok",
+        "staleBanner": "Veri eski — son güncelleme {time}.",
+        "updatedAgo": "{time} önce güncellendi"
+      },
+      "severity": {
+        "critical": "Kritik",
+        "high": "Yüksek",
+        "low": "Düşük",
+        "medium": "Orta"
+      },
+      "states": {
+        "failedLogins": {
+          "affected": "Etkilenen kullanıcı",
+          "affectedSubtitle": "Benzersiz kullanıcı adı",
+          "colCount": "Başarısız deneme",
+          "colUser": "Kullanıcı adı",
+          "emptyOk": "Son 24 saatte başarısız login yok.",
+          "subtitle": "Ariel AQL · 5 dk'da bir",
+          "title": "Başarısız Login",
+          "topUsers": "En çok başarısız — top kullanıcılar",
+          "total": "Toplam başarısız login",
+          "totalSubtitle": "Son 24 saat",
+          "trend": "Başarısız login trendi",
+          "userDetail": "Kullanıcı detayı"
+        },
+        "firewallDeny": {
+          "colCount": "Deny sayısı",
+          "colDestination": "Hedef",
+          "colSource": "Kaynak",
+          "flowPairs": "Kaynak → hedef akışı",
+          "subtitle": "Ariel AQL · 5 dk'da bir",
+          "title": "Firewall Deny",
+          "topDestinations": "En çok hedeflenen adresler",
+          "topSources": "En çok engellenen kaynaklar",
+          "total": "Toplam deny",
+          "totalSubtitle": "Son 24 saat",
+          "trend": "Deny trendi"
+        },
+        "logSources": {
+          "active": "Aktif",
+          "activeVsInactive": "Aktif / pasif",
+          "colEnabled": "Etkin",
+          "colEps": "EPS",
+          "colLastEvent": "Son olay",
+          "colName": "Ad",
+          "colType": "Tip",
+          "inactive": "Pasif",
+          "sourceList": "Log kaynağı listesi",
+          "subtitle": "QRadar config · 10 dk'da bir",
+          "title": "Log Kaynakları",
+          "topEps": "EPS — top kaynaklar",
+          "total": "Toplam log kaynağı",
+          "totalSubtitle": "Tanımlı kaynaklar",
+          "typeDistribution": "Cihaz tipi dağılımı",
+          "unhealthy": "Sağlıksız kaynak",
+          "unhealthySubtitle": "Etkin ama sessiz ya da hatalı"
+        },
+        "offenses": {
+          "colDescription": "Açıklama",
+          "colSeverity": "Önem",
+          "colSource": "Kaynak",
+          "colStatus": "Durum",
+          "colUpdated": "Güncellendi",
+          "criticalCount": "Kritik offense",
+          "criticalCountSubtitle": "Magnitude 8 ve üzeri",
+          "emptyOk": "Açık offense yok.",
+          "magnitudeDist": "Magnitude dağılımı",
+          "openCount": "Açık offense",
+          "openCountSubtitle": "Durum OPEN",
+          "recent": "Son offense'lar",
+          "subtitle": "GET /api/siem/offenses · 2 dk'da bir",
+          "title": "Offense'lar",
+          "topSources": "Top offense kaynakları",
+          "trend": "Offense trendi"
+        },
+        "systemHealth": {
+          "colCategory": "Kategori",
+          "colMessage": "Mesaj",
+          "colSeverity": "Önem",
+          "colTime": "Zaman",
+          "cpu": "CPU kullanımı",
+          "disk": "Disk kullanımı",
+          "emptyOk": "Sistem bildirimi yok.",
+          "errors": "Parsing / bildirim hatası",
+          "errorsSubtitle": "Parsing hataları + WARN/ERROR bildirimleri",
+          "memory": "Bellek kullanımı",
+          "notifications": "Son sistem bildirimleri",
+          "subtitle": "Bildirimler + diagnostik · 5 dk'da bir",
+          "title": "Sistem Sağlığı"
+        },
+        "topAttackers": {
+          "distinct": "Benzersiz saldırgan IP",
+          "distinctSubtitle": "Tekil kaynak IP",
+          "subtitle": "Ariel AQL · 5 dk'da bir",
+          "title": "Top Saldırganlar",
+          "topIps": "Top saldırgan IP'ler",
+          "total": "Toplam event",
+          "totalSubtitle": "Son 24 saat",
+          "trend": "Saldırı hacmi trendi"
+        }
+      },
+      "title": "Güvenlik Operasyonları"
     }
   },
   "relative": {
@@ -252,7 +382,7 @@
       "workflow": "İş Akışı"
     },
     "menu": {
-      "dashboard": "Genel Bakış",
+      "dashboard": "Güvenlik Operasyonları",
       "data": "Veri Kaynakları",
       "flowgroAllProcessReport": "Tüm Süreç Raporu",
       "flowgroCamundaUser": "Camunda Kullanıcıları",
@@ -263,6 +393,7 @@
       "flowgroProcessCockpit": "Süreç Cockpit",
       "flowgroUserReport": "Kullanıcı Raporu",
       "flows": "Flow'lar",
+      "ingest": "Veri Toplama",
       "profile": "Profil"
     }
   },
@@ -278,6 +409,7 @@
   },
   "widgets": {
     "actions": {
+      "add": "Widget ekle",
       "done": "Bitti",
       "drag": "Sürükle",
       "edit": "Düzeni düzenle",
@@ -304,6 +436,51 @@
       "productActivity": "Aktivite (son 24 sa)",
       "recentMessages": "Son mesajlar",
       "recentMessagesEmpty": "Son mesaj yok."
+    },
+    "security": {
+      "failedLogins": {
+        "affected": "Etkilenen kullanıcı",
+        "topUsers": "En çok başarısız — top kullanıcılar",
+        "total": "Toplam başarısız login",
+        "trend": "Başarısız login trendi",
+        "userDetail": "Kullanıcı detayı"
+      },
+      "firewallDeny": {
+        "flowPairs": "Kaynak → hedef akışı",
+        "topDestinations": "En çok hedeflenen adresler",
+        "topSources": "En çok engellenen kaynaklar",
+        "total": "Toplam deny",
+        "trend": "Deny trendi"
+      },
+      "logSources": {
+        "activeVsInactive": "Aktif / pasif",
+        "sourceList": "Log kaynağı listesi",
+        "topEps": "EPS — top kaynaklar",
+        "total": "Toplam log kaynağı",
+        "typeDistribution": "Cihaz tipi dağılımı",
+        "unhealthy": "Sağlıksız kaynak"
+      },
+      "offenses": {
+        "criticalCount": "Kritik offense",
+        "magnitudeDist": "Magnitude dağılımı",
+        "openCount": "Açık offense",
+        "recent": "Son offense'lar",
+        "topSources": "Top offense kaynakları",
+        "trend": "Offense trendi"
+      },
+      "systemHealth": {
+        "cpu": "CPU kullanımı",
+        "disk": "Disk kullanımı",
+        "errors": "Parsing / bildirim hatası",
+        "memory": "Bellek kullanımı",
+        "notifications": "Son sistem bildirimleri"
+      },
+      "topAttackers": {
+        "distinct": "Benzersiz saldırgan IP",
+        "topIps": "Top saldırgan IP'ler",
+        "total": "Toplam event",
+        "trend": "Saldırı hacmi trendi"
+      }
     }
   }
 }

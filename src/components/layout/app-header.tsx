@@ -8,10 +8,7 @@ import { apiRoutes, pageRoutes } from "@/lib/const/pages";
 
 const AppHeader = () => {
   return (
-    <header
-      className="flex h-12 shrink-0 items-center justify-between px-4 gap-4 z-10"
-      style={{ background: "linear-gradient(to right, #0f2447, #1a5276)" }}
-    >
+    <header className="z-10 flex h-12 shrink-0 items-center justify-between gap-4 bg-linear-to-r from-brand-from to-brand-to px-4 shadow-sm">
       <div className="flex items-center gap-2">
         <span className="text-white font-semibold text-sm tracking-wide">
           Colakoglu Security

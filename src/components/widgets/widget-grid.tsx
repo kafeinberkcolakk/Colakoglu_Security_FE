@@ -3,9 +3,16 @@
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
+import { Plus } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { WidgetDefinition, WidgetRegistry } from "./types";
 import { useWidgetLayout } from "./use-widget-layout";
@@ -30,42 +37,86 @@ const ResponsiveGridLayout = dynamic(
 );
 
 interface WidgetGridProps {
+  // When provided, edit mode is controlled by the parent (the internal
+  // Edit/Done toggle is hidden). When omitted, the grid manages it locally.
+  editing?: boolean;
   flowName?: string;
+  onEditingChange?: (next: boolean) => void;
   registry: WidgetRegistry;
   screenId: string;
 }
 
-export function WidgetGrid({ flowName, registry, screenId }: WidgetGridProps) {
+export function WidgetGrid({
+  editing,
+  flowName,
+  onEditingChange,
+  registry,
+  screenId,
+}: WidgetGridProps) {
   const tWidgets = useTranslations("widgets");
   const layoutCtl = useWidgetLayout(screenId, registry);
   const [maximized, setMaximized] = useState<WidgetDefinition | null>(null);
 
+  const isControlled = editing !== undefined;
+  const isEditing = isControlled ? editing : layoutCtl.editing;
+
   const visibleLayouts = layoutCtl.layout.filter((entry) =>
     layoutCtl.visibleDefinitions.some((def) => def.id === entry.i),
+  );
+  const hiddenDefinitions = registry.filter((def) =>
+    layoutCtl.hiddenIds.has(def.id),
   );
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-end gap-2">
-        <button
-          className="rounded border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
-          onClick={() => layoutCtl.setEditing(!layoutCtl.editing)}
-          type="button"
-        >
-          {layoutCtl.editing
-            ? tWidgets("actions.done")
-            : tWidgets("actions.edit")}
-        </button>
-        {layoutCtl.editing && (
-          <button
-            className="rounded border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted"
-            onClick={() => layoutCtl.reset()}
-            type="button"
-          >
-            {tWidgets("actions.reset")}
-          </button>
-        )}
-      </div>
+      {(isEditing || !isControlled) && (
+        <div className="flex items-center justify-end gap-2">
+          {!isControlled && (
+            <button
+              className="rounded border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+              onClick={() => layoutCtl.setEditing(!layoutCtl.editing)}
+              type="button"
+            >
+              {isEditing ? tWidgets("actions.done") : tWidgets("actions.edit")}
+            </button>
+          )}
+          {isEditing && hiddenDefinitions.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild={true}>
+                <button
+                  className="flex items-center gap-1 rounded border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                  type="button"
+                >
+                  <Plus className="size-3.5" />
+                  {tWidgets("actions.add")}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {hiddenDefinitions.map((def) => (
+                  <DropdownMenuItem
+                    key={def.id}
+                    onSelect={() => layoutCtl.showWidget(def.id)}
+                  >
+                    {tWidgets(def.titleKey)}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          {isEditing && (
+            <button
+              className="rounded border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted"
+              onClick={() => {
+                layoutCtl.reset();
+                onEditingChange?.(false);
+              }}
+              type="button"
+            >
+              {tWidgets("actions.reset")}
+            </button>
+          )}
+        </div>
+      )}
 
       <ResponsiveGridLayout
         breakpoints={{
@@ -79,12 +130,12 @@ export function WidgetGrid({ flowName, registry, screenId }: WidgetGridProps) {
           sm: GRID_COLUMNS_SM,
         }}
         draggableHandle={`.${WIDGET_DRAG_HANDLE_CLASS}`}
-        isDraggable={layoutCtl.editing}
-        isResizable={layoutCtl.editing}
+        isDraggable={isEditing}
+        isResizable={isEditing}
         layouts={{ lg: visibleLayouts, md: visibleLayouts, sm: visibleLayouts }}
         margin={GRID_MARGIN}
         onLayoutChange={(next) => {
-          if (layoutCtl.editing) {
+          if (isEditing) {
             layoutCtl.setLayout(next);
           }
         }}
@@ -93,7 +144,7 @@ export function WidgetGrid({ flowName, registry, screenId }: WidgetGridProps) {
         {layoutCtl.visibleDefinitions.map((def) => (
           <div key={def.id}>
             <WidgetFrame
-              editing={layoutCtl.editing}
+              editing={isEditing}
               onMaximize={() => setMaximized(def)}
               onRemove={() => layoutCtl.hideWidget(def.id)}
               title={tWidgets(def.titleKey)}

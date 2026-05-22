@@ -15,6 +15,7 @@ export const pageRoutes = {
   flowgroUserReport: "/flowgro-ui/user-report",
   flows: "/flows",
   home: "/",
+  ingest: "/ingest",
   messageDetail: (messageId: string) => `/data/messages/${messageId}`,
   profile: "/profile",
   subjectDetail: (subject: string) => `/data/${encodeURIComponent(subject)}`,

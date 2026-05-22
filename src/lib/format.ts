@@ -9,6 +9,10 @@ export function formatDate(value: string): string {
   return parsed.toLocaleString();
 }
 
+export function formatNumber(value: number): string {
+  return value.toLocaleString();
+}
+
 export function formatBytes(bytes: number): string {
   if (bytes < KIBIBYTE) {
     return `${bytes} B`;

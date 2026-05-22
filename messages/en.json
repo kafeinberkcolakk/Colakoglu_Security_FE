@@ -238,6 +238,136 @@
         "updateError": "Failed to update profile.",
         "updateSuccess": "Profile updated successfully."
       }
+    },
+    "securityDashboard": {
+      "editLayout": "Edit layout",
+      "editLayoutDone": "Done editing",
+      "global": {
+        "activeThreats": "Active threats",
+        "activeThreatsSubtitle": "Distinct attacker IPs",
+        "critical": "Critical offenses",
+        "criticalSubtitle": "Magnitude 8 and above",
+        "healthyCollectors": "Healthy collectors",
+        "healthyCollectorsSubtitle": "Collectors reporting normally",
+        "openOffenses": "Open offenses",
+        "openOffensesSubtitle": "Status OPEN",
+        "title": "Overview"
+      },
+      "health": {
+        "healthy": "Healthy",
+        "stopped": "Stopped",
+        "unknown": "Unknown",
+        "warning": "Degraded"
+      },
+      "live": "● LIVE",
+      "refresh": "Refresh",
+      "section": {
+        "errorDescription": "QRadar data unavailable (HTTP {code}).",
+        "errorTitle": "Could not load data",
+        "everySeconds": "updates every {seconds}s",
+        "noDataTitle": "This collector has not produced data yet",
+        "noTrend": "Not enough history for a trend yet",
+        "staleBanner": "Data is stale — last update {time}.",
+        "updatedAgo": "updated {time} ago"
+      },
+      "severity": {
+        "critical": "Critical",
+        "high": "High",
+        "low": "Low",
+        "medium": "Medium"
+      },
+      "states": {
+        "failedLogins": {
+          "affected": "Affected users",
+          "affectedSubtitle": "Distinct usernames",
+          "colCount": "Failed attempts",
+          "colUser": "Username",
+          "emptyOk": "No failed logins in the last 24 hours.",
+          "subtitle": "Ariel AQL · every 5 min",
+          "title": "Failed Logins",
+          "topUsers": "Most failed — top users",
+          "total": "Total failed logins",
+          "totalSubtitle": "Last 24 hours",
+          "trend": "Failed login trend",
+          "userDetail": "User detail"
+        },
+        "firewallDeny": {
+          "colCount": "Deny count",
+          "colDestination": "Destination",
+          "colSource": "Source",
+          "flowPairs": "Source → destination flow",
+          "subtitle": "Ariel AQL · every 5 min",
+          "title": "Firewall Deny",
+          "topDestinations": "Most targeted destinations",
+          "topSources": "Most blocked sources",
+          "total": "Total deny",
+          "totalSubtitle": "Last 24 hours",
+          "trend": "Deny trend"
+        },
+        "logSources": {
+          "active": "Active",
+          "activeVsInactive": "Active vs inactive",
+          "colEnabled": "Enabled",
+          "colEps": "EPS",
+          "colLastEvent": "Last event",
+          "colName": "Name",
+          "colType": "Type",
+          "inactive": "Inactive",
+          "sourceList": "Log source list",
+          "subtitle": "QRadar config · every 10 min",
+          "title": "Log Sources",
+          "topEps": "EPS — top sources",
+          "total": "Total log sources",
+          "totalSubtitle": "Configured sources",
+          "typeDistribution": "Device type distribution",
+          "unhealthy": "Unhealthy sources",
+          "unhealthySubtitle": "Enabled but silent or failing"
+        },
+        "offenses": {
+          "colDescription": "Description",
+          "colSeverity": "Severity",
+          "colSource": "Source",
+          "colStatus": "Status",
+          "colUpdated": "Updated",
+          "criticalCount": "Critical offenses",
+          "criticalCountSubtitle": "Magnitude 8 and above",
+          "emptyOk": "No open offenses.",
+          "magnitudeDist": "Magnitude distribution",
+          "openCount": "Open offenses",
+          "openCountSubtitle": "Status OPEN",
+          "recent": "Recent offenses",
+          "subtitle": "GET /api/siem/offenses · every 2 min",
+          "title": "Offenses",
+          "topSources": "Top offense sources",
+          "trend": "Offense trend"
+        },
+        "systemHealth": {
+          "colCategory": "Category",
+          "colMessage": "Message",
+          "colSeverity": "Severity",
+          "colTime": "Time",
+          "cpu": "CPU usage",
+          "disk": "Disk usage",
+          "emptyOk": "No system notifications.",
+          "errors": "Parsing / notification issues",
+          "errorsSubtitle": "Parsing errors + WARN/ERROR notices",
+          "memory": "Memory usage",
+          "notifications": "Recent system notifications",
+          "subtitle": "Notifications + diagnostics · every 5 min",
+          "title": "System Health"
+        },
+        "topAttackers": {
+          "distinct": "Distinct attacker IPs",
+          "distinctSubtitle": "Unique source IPs",
+          "subtitle": "Ariel AQL · every 5 min",
+          "title": "Top Attackers",
+          "topIps": "Top attacker IPs",
+          "total": "Total events",
+          "totalSubtitle": "Last 24 hours",
+          "trend": "Attack volume trend"
+        }
+      },
+      "title": "Security Operations"
     }
   },
   "relative": {
@@ -252,7 +382,7 @@
       "workflow": "Workflow"
     },
     "menu": {
-      "dashboard": "Dashboard",
+      "dashboard": "Security Operations",
       "data": "Data Sources",
       "flowgroAllProcessReport": "All Process Report",
       "flowgroCamundaUser": "Camunda Users",
@@ -263,6 +393,7 @@
       "flowgroProcessCockpit": "Process Cockpit",
       "flowgroUserReport": "User Report",
       "flows": "Flows",
+      "ingest": "Ingest Stats",
       "profile": "Profile"
     }
   },
@@ -278,6 +409,7 @@
   },
   "widgets": {
     "actions": {
+      "add": "Add widget",
       "done": "Done",
       "drag": "Drag",
       "edit": "Edit layout",
@@ -304,6 +436,51 @@
       "productActivity": "Activity (last 24h)",
       "recentMessages": "Recent messages",
       "recentMessagesEmpty": "No recent messages."
+    },
+    "security": {
+      "failedLogins": {
+        "affected": "Affected users",
+        "topUsers": "Most failed — top users",
+        "total": "Total failed logins",
+        "trend": "Failed login trend",
+        "userDetail": "User detail"
+      },
+      "firewallDeny": {
+        "flowPairs": "Source → destination flow",
+        "topDestinations": "Most targeted destinations",
+        "topSources": "Most blocked sources",
+        "total": "Total deny",
+        "trend": "Deny trend"
+      },
+      "logSources": {
+        "activeVsInactive": "Active vs inactive",
+        "sourceList": "Log source list",
+        "topEps": "EPS — top sources",
+        "total": "Total log sources",
+        "typeDistribution": "Device type distribution",
+        "unhealthy": "Unhealthy sources"
+      },
+      "offenses": {
+        "criticalCount": "Critical offenses",
+        "magnitudeDist": "Magnitude distribution",
+        "openCount": "Open offenses",
+        "recent": "Recent offenses",
+        "topSources": "Top offense sources",
+        "trend": "Offense trend"
+      },
+      "systemHealth": {
+        "cpu": "CPU usage",
+        "disk": "Disk usage",
+        "errors": "Parsing / notification issues",
+        "memory": "Memory usage",
+        "notifications": "Recent system notifications"
+      },
+      "topAttackers": {
+        "distinct": "Distinct attacker IPs",
+        "topIps": "Top attacker IPs",
+        "total": "Total events",
+        "trend": "Attack volume trend"
+      }
     }
   }
 }

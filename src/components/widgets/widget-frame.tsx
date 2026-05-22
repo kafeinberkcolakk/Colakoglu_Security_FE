@@ -30,7 +30,7 @@ export function WidgetFrame({
   return (
     <div
       className={cn(
-        "group relative flex h-full flex-col rounded-lg border border-border bg-card",
+        "group relative flex h-full flex-col rounded-lg border border-border bg-card shadow-card transition-shadow duration-200 hover:shadow-card-hover",
         editing && "ring-1 ring-primary/30",
         className,
       )}
